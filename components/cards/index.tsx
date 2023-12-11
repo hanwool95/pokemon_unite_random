@@ -2,7 +2,7 @@
 
 import useCards from "@/hooks/useCards";
 import Image from "next/image";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 
 function shuffleArray(array: string[]) {
   // Fisher-Yates (Durstenfeld)
@@ -54,34 +54,39 @@ function shuffleZigzag(
 
 const Cards = () => {
   const { attackers, balances, defences, speeders, supports } = useCards();
+  const [mainCards, setMainCards] = useState<string[]>([]);
 
-  const shuffledCards = useMemo(() => {
+  const shuffleCards = useCallback(() => {
     const shuffledAttackers = shuffleArray(attackers);
     const shuffledBalances = shuffleArray(balances);
     const shuffledDefences = shuffleArray(defences);
     const shuffledSpeeders = shuffleArray(speeders);
     const shuffledSupports = shuffleArray(supports);
 
-    return shuffleZigzag(
-      shuffledAttackers,
-      shuffledBalances,
-      shuffledDefences,
-      shuffledSpeeders,
-      shuffledSupports
+    setMainCards(
+      shuffleZigzag(
+        shuffledAttackers,
+        shuffledBalances,
+        shuffledDefences,
+        shuffledSpeeders,
+        shuffledSupports
+      )
     );
   }, [attackers, balances, defences, speeders, supports]);
 
   return (
     <div>
-      {shuffledCards.map((imgPath, index) => (
-        <Image
-          key={index}
-          src={imgPath}
-          alt="Attacker"
-          width={300}
-          height={300}
-        />
-      ))}
+      <button onClick={shuffleCards}>{"섞기"}</button>
+      {mainCards &&
+        mainCards.map((imgPath: string, index: number) => (
+          <Image
+            key={index}
+            src={imgPath}
+            alt="Attacker"
+            width={300}
+            height={300}
+          />
+        ))}
     </div>
   );
 };
