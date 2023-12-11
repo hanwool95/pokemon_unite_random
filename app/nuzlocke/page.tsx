@@ -1,5 +1,8 @@
+import Cards from "@/components/cards";
+import React from "react";
+
 const NuzlockePage = () => {
-  return <div></div>;
+  return <Cards />;
 };
 
 export default NuzlockePage;
