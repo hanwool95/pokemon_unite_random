@@ -3,6 +3,7 @@
 import useCards from "@/hooks/useCards";
 import Image from "next/image";
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import CarouselContainer from "../carousel";
 
 function shuffleArray(array: string[]) {
   // Fisher-Yates (Durstenfeld)
@@ -75,18 +76,20 @@ const Cards = () => {
   }, [attackers, balances, defences, speeders, supports]);
 
   return (
-    <div>
+    <div className="flex w-[300px] h-[300px]">
       <button onClick={shuffleCards}>{"섞기"}</button>
-      {mainCards &&
-        mainCards.map((imgPath: string, index: number) => (
-          <Image
-            key={index}
-            src={imgPath}
-            alt="Attacker"
-            width={300}
-            height={300}
-          />
-        ))}
+      <CarouselContainer pagination navigator>
+        {mainCards &&
+          mainCards.map((imgPath: string, index: number) => (
+            <Image
+              key={index}
+              src={imgPath}
+              alt="Card"
+              width={300}
+              height={300}
+            />
+          ))}
+      </CarouselContainer>
     </div>
   );
 };
