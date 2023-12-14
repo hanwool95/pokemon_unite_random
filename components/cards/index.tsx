@@ -114,7 +114,7 @@ const Cards = () => {
 
   return (
     <div className="relative w-full p-20">
-      <div className="flex">
+      <div className="flex text-xl">
         <button
           className="px-4 py-2 font-bold text-white bg-blue-500 rounded"
           onClick={shuffleCards}
