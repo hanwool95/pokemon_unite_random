@@ -92,6 +92,12 @@ const Cards = () => {
     );
   }, [currentIndex, mainCards]);
 
+  const successBidButtonCallback = () => {
+    setMainCards((prevCards) =>
+      prevCards.filter((_, index) => index !== currentIndex)
+    );
+  };
+
   return (
     <div className="relative w-full p-20">
       <button
@@ -102,7 +108,10 @@ const Cards = () => {
       </button>
       <div className="flex w-full p-12">{currentCard}</div>
       <div className="flex w-full">
-        <button className="px-4 py-2 font-bold text-white bg-green-500 rounded ml-auto mr-10">
+        <button
+          className="px-4 py-2 font-bold text-white bg-green-500 rounded ml-auto mr-10"
+          onClick={successBidButtonCallback}
+        >
           {"낙찰"}
         </button>
         <button className="px-4 py-2 font-bold text-white bg-red-500 rounded mr-auto ml-10">
