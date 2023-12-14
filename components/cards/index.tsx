@@ -138,7 +138,7 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
       prevCards.filter((_, index) => index !== currentIndex)
     );
     setFailRow(0);
-  }, [currentIndex, mainCards, currentBid]);
+  }, [currentIndex, mainCards, currentBid, selectedTeamIndex]);
 
   const failBidButtonCallback = useCallback(() => {
     setCurrentIndex((prevIndex) => {
@@ -192,7 +192,11 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
           </div>
         </div>
         <div>
-          <Teams teams={teamsStatus} />
+          <Teams
+            teams={teamsStatus}
+            selectedTeamIndex={selectedTeamIndex}
+            setSelectedTeamIndex={setSelectedTeamIndex}
+          />
         </div>
       </div>
     </div>
