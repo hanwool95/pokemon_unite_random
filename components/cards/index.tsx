@@ -92,11 +92,19 @@ const Cards = () => {
     );
   }, [currentIndex, mainCards]);
 
-  const successBidButtonCallback = () => {
+  const successBidButtonCallback = useCallback(() => {
     setMainCards((prevCards) =>
       prevCards.filter((_, index) => index !== currentIndex)
     );
-  };
+  }, [currentIndex]);
+
+  const failBidButtonCallback = useCallback(() => {
+    setCurrentIndex((prevIndex) => {
+      // mainCards의 길이를 체크하여 인덱스를 업데이트합니다.
+      // 배열의 길이보다 크거나 같은 경우에는 0으로 되돌립니다.
+      return (prevIndex + 1) % mainCards.length;
+    });
+  }, [mainCards]);
 
   return (
     <div className="relative w-full p-20">
@@ -114,7 +122,10 @@ const Cards = () => {
         >
           {"낙찰"}
         </button>
-        <button className="px-4 py-2 font-bold text-white bg-red-500 rounded mr-auto ml-10">
+        <button
+          className="px-4 py-2 font-bold text-white bg-red-500 rounded mr-auto ml-10"
+          onClick={failBidButtonCallback}
+        >
           {"유찰"}
         </button>
       </div>
