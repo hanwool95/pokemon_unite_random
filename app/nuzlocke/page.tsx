@@ -2,11 +2,11 @@ import Cards from "@/components/cards";
 import React from "react";
 
 const FIRST_COTEST_TEAMS = [
-  "술값이안던지면이김",
+  "술값이",
   "조별과제",
-  "Oyasumi makuro",
+  "Oyasumi",
   "SF",
-  "참지마요 사각김밥",
+  "참지마요",
   "슈팅스타",
   "Team UB",
   "버스트콜",

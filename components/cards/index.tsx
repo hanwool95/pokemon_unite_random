@@ -145,25 +145,27 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
           <p className=" text-red-600">{`${failRow} 연속 유찰`}</p>
         </div>
       </div>
-      <div className="flex">
-        <div className="flex w-full p-12">{currentCard}</div>
+      <div className="flex w-full">
+        <div className="mx-auto">
+          <div className="flex w-full p-12">{currentCard}</div>
+          <div className="flex w-full">
+            <button
+              className="px-4 py-2 font-bold text-white bg-green-500 rounded ml-auto mr-10"
+              onClick={successBidButtonCallback}
+            >
+              {"낙찰"}
+            </button>
+            <button
+              className="px-4 py-2 font-bold text-white bg-red-500 rounded mr-auto ml-10"
+              onClick={failBidButtonCallback}
+            >
+              {"유찰"}
+            </button>
+          </div>
+        </div>
         <div>
           <Teams teams={teamsStatus} />
         </div>
-      </div>
-      <div className="flex w-full">
-        <button
-          className="px-4 py-2 font-bold text-white bg-green-500 rounded ml-auto mr-10"
-          onClick={successBidButtonCallback}
-        >
-          {"낙찰"}
-        </button>
-        <button
-          className="px-4 py-2 font-bold text-white bg-red-500 rounded mr-auto ml-10"
-          onClick={failBidButtonCallback}
-        >
-          {"유찰"}
-        </button>
       </div>
     </div>
   );
