@@ -101,6 +101,14 @@ const Cards = () => {
         {"섞기"}
       </button>
       <div className="flex w-full p-12">{currentCard}</div>
+      <div className="flex w-full">
+        <button className="px-4 py-2 font-bold text-white bg-green-500 rounded ml-auto mr-10">
+          {"낙찰"}
+        </button>
+        <button className="px-4 py-2 font-bold text-white bg-red-500 rounded mr-auto ml-10">
+          {"유찰"}
+        </button>
+      </div>
     </div>
   );
 };
