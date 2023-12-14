@@ -3,7 +3,6 @@
 import useCards from "@/hooks/useCards";
 import Image from "next/image";
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import CarouselContainer from "../carousel";
 
 function shuffleArray(array: string[]) {
   // Fisher-Yates (Durstenfeld)
@@ -56,6 +55,11 @@ function shuffleZigzag(
 const Cards = () => {
   const { attackers, balances, defences, speeders, supports } = useCards();
   const [mainCards, setMainCards] = useState<string[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    console.log("current mainCards: ", mainCards);
+  }, [mainCards]);
 
   const shuffleCards = useCallback(() => {
     const shuffledAttackers = shuffleArray(attackers);
@@ -75,21 +79,28 @@ const Cards = () => {
     );
   }, [attackers, balances, defences, speeders, supports]);
 
+  const currentCard = useMemo(() => {
+    if (mainCards.length === 0) return "셔플해주세요.";
+    return (
+      <Image
+        className="mx-auto"
+        src={mainCards[currentIndex]}
+        alt="Card"
+        width={300}
+        height={300}
+      />
+    );
+  }, [currentIndex, mainCards]);
+
   return (
-    <div className="flex w-[300px] h-[300px]">
-      <button onClick={shuffleCards}>{"섞기"}</button>
-      <CarouselContainer pagination navigator>
-        {mainCards &&
-          mainCards.map((imgPath: string, index: number) => (
-            <Image
-              key={index}
-              src={imgPath}
-              alt="Card"
-              width={300}
-              height={300}
-            />
-          ))}
-      </CarouselContainer>
+    <div className="relative w-full p-20">
+      <button
+        className="px-4 py-2 font-bold text-white bg-blue-500 rounded"
+        onClick={shuffleCards}
+      >
+        {"섞기"}
+      </button>
+      <div className="flex w-full p-12">{currentCard}</div>
     </div>
   );
 };
