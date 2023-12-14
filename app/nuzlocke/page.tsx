@@ -20,7 +20,14 @@ const FIRST_COTEST_TEAMS = [
 ];
 
 const NuzlockePage = () => {
-  return <Cards teams={FIRST_COTEST_TEAMS} />;
+  return (
+    <>
+      <p className="text-right">
+        {"포유나 너즐록 경매 copy right by 3분요약카이사르"}
+      </p>
+      <Cards teams={FIRST_COTEST_TEAMS} />
+    </>
+  );
 };
 
 export default NuzlockePage;
