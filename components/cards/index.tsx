@@ -56,9 +56,13 @@ const Cards = () => {
   const { attackers, balances, defences, speeders, supports } = useCards();
   const [mainCards, setMainCards] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [failRow, setFailRow] = useState(0);
 
   useEffect(() => {
     console.log("current mainCards: ", mainCards);
+  }, [mainCards]);
+  const remainPokemon = useMemo(() => {
+    return mainCards.length;
   }, [mainCards]);
 
   const shuffleCards = useCallback(() => {
@@ -96,6 +100,7 @@ const Cards = () => {
     setMainCards((prevCards) =>
       prevCards.filter((_, index) => index !== currentIndex)
     );
+    setFailRow(0);
   }, [currentIndex]);
 
   const failBidButtonCallback = useCallback(() => {
@@ -104,16 +109,23 @@ const Cards = () => {
       // 배열의 길이보다 크거나 같은 경우에는 0으로 되돌립니다.
       return (prevIndex + 1) % mainCards.length;
     });
+    setFailRow((prev) => prev + 1);
   }, [mainCards]);
 
   return (
     <div className="relative w-full p-20">
-      <button
-        className="px-4 py-2 font-bold text-white bg-blue-500 rounded"
-        onClick={shuffleCards}
-      >
-        {"섞기"}
-      </button>
+      <div className="flex">
+        <button
+          className="px-4 py-2 font-bold text-white bg-blue-500 rounded"
+          onClick={shuffleCards}
+        >
+          {"섞기"}
+        </button>
+        <div className="flex-col ml-auto">
+          <p className="">{`현재 남은 포켓몬 ${remainPokemon}마리`}</p>
+          <p className=" text-red-600">{`${failRow} 연속 유찰`}</p>
+        </div>
+      </div>
       <div className="flex w-full p-12">{currentCard}</div>
       <div className="flex w-full">
         <button
