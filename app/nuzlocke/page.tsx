@@ -2,6 +2,10 @@ import Cards from "@/components/cards";
 import React from "react";
 
 const FIRST_COTEST_TEAMS = [
+  "Droplet",
+  "망할것들",
+  "카레낀도르",
+  "벵키시",
   "술값이",
   "조별과제",
   "Oyasumi",
