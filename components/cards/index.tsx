@@ -3,6 +3,13 @@
 import useCards from "@/hooks/useCards";
 import Image from "next/image";
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import Teams from "../teams";
+
+export type Team = {
+  name: string;
+  point: number;
+  currentPokemon: string[];
+};
 
 function shuffleArray(array: string[]) {
   // Fisher-Yates (Durstenfeld)
@@ -52,11 +59,23 @@ function shuffleZigzag(
   return result;
 }
 
-const Cards = () => {
+type CardsProps = {
+  teams: string[];
+};
+
+const Cards: React.FC<CardsProps> = ({ teams }) => {
   const { attackers, balances, defences, speeders, supports } = useCards();
   const [mainCards, setMainCards] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [failRow, setFailRow] = useState(0);
+  const [teamsStatus, setTeamsStatus] = useState<Team[]>([]);
+
+  useEffect(() => {
+    const initTeamStatus: Team[] = teams.map((name) => {
+      return { name, point: 100, currentPokemon: [] };
+    });
+    setTeamsStatus(initTeamStatus);
+  }, []);
 
   useEffect(() => {
     console.log("current mainCards: ", mainCards);
@@ -126,7 +145,12 @@ const Cards = () => {
           <p className=" text-red-600">{`${failRow} 연속 유찰`}</p>
         </div>
       </div>
-      <div className="flex w-full p-12">{currentCard}</div>
+      <div className="flex">
+        <div className="flex w-full p-12">{currentCard}</div>
+        <div>
+          <Teams teams={teamsStatus} />
+        </div>
+      </div>
       <div className="flex w-full">
         <button
           className="px-4 py-2 font-bold text-white bg-green-500 rounded ml-auto mr-10"
