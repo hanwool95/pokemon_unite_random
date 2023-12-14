@@ -69,10 +69,16 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [failRow, setFailRow] = useState(0);
   const [teamsStatus, setTeamsStatus] = useState<Team[]>([]);
+  const [selectedTeamIndex, setSelectedTeamIndex] = useState(0);
+  const [currentBid, setCurrentBid] = useState<number>();
 
   useEffect(() => {
     const initTeamStatus: Team[] = teams.map((name) => {
-      return { name, point: 100, currentPokemon: [] };
+      return {
+        name,
+        point: 100,
+        currentPokemon: [],
+      };
     });
     setTeamsStatus(initTeamStatus);
   }, []);
@@ -116,11 +122,23 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
   }, [currentIndex, mainCards]);
 
   const successBidButtonCallback = useCallback(() => {
+    setTeamsStatus((prev) => {
+      const newTeams = [...prev];
+      newTeams[selectedTeamIndex] = {
+        ...newTeams[selectedTeamIndex],
+        currentPokemon: [
+          ...newTeams[selectedTeamIndex].currentPokemon,
+          mainCards[currentIndex],
+        ],
+        point: newTeams[selectedTeamIndex].point - (currentBid as number),
+      };
+      return newTeams;
+    });
     setMainCards((prevCards) =>
       prevCards.filter((_, index) => index !== currentIndex)
     );
     setFailRow(0);
-  }, [currentIndex]);
+  }, [currentIndex, mainCards, currentBid]);
 
   const failBidButtonCallback = useCallback(() => {
     setCurrentIndex((prevIndex) => {
@@ -161,6 +179,16 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
             >
               {"유찰"}
             </button>
+          </div>
+          <div className="flex">
+            <input
+              className="mt-4 mx-auto border border-gray-600 text-center h-8"
+              type="number"
+              value={currentBid}
+              onChange={(event) => {
+                setCurrentBid(Number(event.target.value));
+              }}
+            ></input>
           </div>
         </div>
         <div>
