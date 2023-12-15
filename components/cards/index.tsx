@@ -181,6 +181,9 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
         };
         return newTeams;
       });
+      setMainCards((prevCards) =>
+        prevCards.filter((_, index) => index !== currentIndex)
+      );
 
       // setTeamsStatus 호출 후에 setWatingTeams를 호출합니다.
       setWatingTeams((prevWatingTeams) => {
@@ -194,7 +197,14 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
         return prevWatingTeams;
       });
     }
-  }, [mainCards, watingTeams, teamsStatus, setTeamsStatus, currentIndex]);
+  }, [
+    mainCards,
+    watingTeams,
+    teamsStatus,
+    setTeamsStatus,
+    currentIndex,
+    setMainCards,
+  ]);
 
   return (
     <div className="relative w-full p-20">
