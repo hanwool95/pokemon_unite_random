@@ -121,6 +121,12 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
     );
   }, [currentIndex, mainCards]);
 
+  const isValidBid = useMemo(() => {
+    if (currentBid === 0) return true;
+    if (!currentBid) return false;
+    return teamsStatus[selectedTeamIndex].point >= currentBid;
+  }, [currentIndex, teamsStatus, currentBid, selectedTeamIndex]);
+
   const successBidButtonCallback = useCallback(() => {
     setTeamsStatus((prev) => {
       const newTeams = [...prev];
@@ -168,8 +174,11 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
           <div className="flex w-full p-12">{currentCard}</div>
           <div className="flex w-full">
             <button
-              className="px-4 py-2 font-bold text-white bg-green-500 rounded ml-auto mr-10"
+              className={`px-4 py-2 font-bold text-white ${
+                isValidBid ? "bg-green-500" : "bg-gray-400"
+              } rounded ml-auto mr-10`}
               onClick={successBidButtonCallback}
+              disabled={!isValidBid}
             >
               {"낙찰"}
             </button>
