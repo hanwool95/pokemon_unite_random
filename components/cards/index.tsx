@@ -167,7 +167,22 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
       return (prevIndex + 1) % mainCards.length;
     });
     setFailRow((prev) => prev + 1);
-  }, [mainCards]);
+    if (watingTeams.length > 0) {
+      const targetTeamIndex = watingTeams[0];
+      setTeamsStatus((prev) => {
+        const newTeams = [...prev];
+        newTeams[targetTeamIndex] = {
+          ...newTeams[targetTeamIndex],
+          currentPokemon: [
+            ...newTeams[targetTeamIndex].currentPokemon,
+            mainCards[currentIndex],
+          ],
+          point: newTeams[targetTeamIndex].point,
+        };
+        return newTeams;
+      });
+    }
+  }, [mainCards, watingTeams, setTeamsStatus, currentIndex]);
 
   return (
     <div className="relative w-full p-20">
