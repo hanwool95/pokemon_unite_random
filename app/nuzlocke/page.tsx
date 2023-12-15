@@ -14,9 +14,7 @@ const FIRST_COTEST_TEAMS = [
   "슈팅스타",
   "Team UB",
   "버스트콜",
-  "일레이나",
   "은하의바람",
-  "조조좃",
 ];
 
 const NuzlockePage = () => {
