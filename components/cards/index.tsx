@@ -71,6 +71,7 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
   const [teamsStatus, setTeamsStatus] = useState<Team[]>([]);
   const [selectedTeamIndex, setSelectedTeamIndex] = useState(0);
   const [currentBid, setCurrentBid] = useState<number>();
+  const [watingTeams, setWatingTeams] = useState<number[]>([]);
 
   useEffect(() => {
     const initTeamStatus: Team[] = teams.map((name) => {
@@ -89,6 +90,19 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
   const remainPokemon = useMemo(() => {
     return mainCards.length;
   }, [mainCards]);
+
+  useEffect(() => {
+    if (
+      teamsStatus[selectedTeamIndex]?.point === 0 &&
+      teamsStatus[selectedTeamIndex]?.currentPokemon.length < 5 &&
+      !watingTeams.includes(selectedTeamIndex)
+    ) {
+      setWatingTeams((prevWatingTeams) => [
+        ...prevWatingTeams,
+        selectedTeamIndex,
+      ]);
+    }
+  }, [teamsStatus]);
 
   const shuffleCards = useCallback(() => {
     const shuffledAttackers = shuffleArray(attackers);
@@ -125,7 +139,7 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
     if (currentBid === 0) return true;
     if (!currentBid) return false;
     return teamsStatus[selectedTeamIndex].point >= currentBid;
-  }, [currentIndex, teamsStatus, currentBid, selectedTeamIndex]);
+  }, [teamsStatus, currentBid, selectedTeamIndex]);
 
   const successBidButtonCallback = useCallback(() => {
     setTeamsStatus((prev) => {
@@ -167,6 +181,12 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
         <div className="flex-col ml-auto">
           <p className="">{`현재 남은 포켓몬 ${remainPokemon}마리`}</p>
           <p className=" text-red-600">{`${failRow} 연속 유찰`}</p>
+          <p>
+            {"현재 유찰 대기목록: "}
+            {watingTeams.map((teamIndex) => {
+              return teamsStatus[teamIndex].name + ", ";
+            })}
+          </p>
         </div>
       </div>
       <div className="flex w-full">
