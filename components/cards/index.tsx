@@ -181,8 +181,20 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
         };
         return newTeams;
       });
+
+      // setTeamsStatus 호출 후에 setWatingTeams를 호출합니다.
+      setWatingTeams((prevWatingTeams) => {
+        // teamStatus[targetTeamIndex].currentPokemon의 길이가 5인지 확인
+        if (
+          prevWatingTeams.length > 0 &&
+          teamsStatus[targetTeamIndex].currentPokemon.length === 4
+        ) {
+          return prevWatingTeams.slice(1); // 첫 번째 요소를 제거합니다.
+        }
+        return prevWatingTeams;
+      });
     }
-  }, [mainCards, watingTeams, setTeamsStatus, currentIndex]);
+  }, [mainCards, watingTeams, teamsStatus, setTeamsStatus, currentIndex]);
 
   return (
     <div className="relative w-full p-20">
