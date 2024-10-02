@@ -25,7 +25,7 @@ function shuffleZigzag(
   balances: string[],
   defences: string[],
   speeders: string[],
-  supports: string[]
+  supports: string[],
 ) {
   // 결과를 저장할 새 배열 생성
   let result = [];
@@ -117,8 +117,8 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
         shuffledBalances,
         shuffledDefences,
         shuffledSpeeders,
-        shuffledSupports
-      )
+        shuffledSupports,
+      ),
     );
   }, [attackers, balances, defences, speeders, supports]);
 
@@ -155,7 +155,7 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
       return newTeams;
     });
     setMainCards((prevCards) =>
-      prevCards.filter((_, index) => index !== currentIndex)
+      prevCards.filter((_, index) => index !== currentIndex),
     );
     setFailRow(0);
   }, [currentIndex, mainCards, currentBid, selectedTeamIndex]);
@@ -182,7 +182,7 @@ const Cards: React.FC<CardsProps> = ({ teams }) => {
         return newTeams;
       });
       setMainCards((prevCards) =>
-        prevCards.filter((_, index) => index !== currentIndex)
+        prevCards.filter((_, index) => index !== currentIndex),
       );
 
       // setTeamsStatus 호출 후에 setWatingTeams를 호출합니다.
