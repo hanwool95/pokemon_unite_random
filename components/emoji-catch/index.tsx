@@ -7,6 +7,8 @@ const EmojiCatchContainer = () => {
   const {
     roomCode,
     setRoomCode,
+    nickname,
+    setNickname,
     message,
     setMessage,
     messages,
@@ -43,6 +45,15 @@ const EmojiCatchContainer = () => {
         </>
       ) : (
         <div>
+          <div>
+            <input
+              type="text"
+              className={"border p-2"}
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              placeholder="닉네임 입력"
+            />
+          </div>
           <Button className={"my-5 border p-2 rounded-xl"} onClick={createRoom}>
             방 만들기
           </Button>

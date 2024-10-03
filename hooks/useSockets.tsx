@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import io from "socket.io-client";
 
 const useSockets = () => {
+  const [nickname, setNickname] = useState<string>("");
   const [roomCode, setRoomCode] = useState("");
   const [socket, setSocket] = useState<any>(null);
   const [message, setMessage] = useState<string>("");
@@ -14,7 +15,7 @@ const useSockets = () => {
     // 소켓 서버에 연결
     const skt = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
       withCredentials: true,
-      transports: ["websocket", "polling"], // 웹소켓 및 폴링 방식 모두 허용
+      transports: ["websocket", "polling"],
       extraHeaders: {
         "Access-Control-Allow-Origin": "*",
       },
@@ -39,35 +40,44 @@ const useSockets = () => {
 
     setSocket(skt);
 
-    // 컴포넌트가 언마운트 될 때 소켓 연결 해제
     return () => {
       skt.disconnect();
     };
   }, []);
 
   const createRoom = useCallback(() => {
-    console.log("create room");
-    socket.emit("createRoom");
-  }, [socket]);
+    if (!nickname.trim()) {
+      alert("닉네임을 입력해주세요.");
+      return;
+    }
+    socket.emit("createRoom", { nickname });
+  }, [socket, nickname]);
 
   const joinRoom = useCallback(() => {
-    socket.emit("joinRoom", roomCode);
-  }, [socket, roomCode]);
+    if (!nickname.trim()) {
+      alert("닉네임을 입력해주세요.");
+      return;
+    }
+    console.log("join room");
+    socket.emit("joinRoom", { roomCode, nickname });
+  }, [socket, roomCode, nickname]);
 
   const sendMessage = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (message.trim() && socket) {
-        socket.emit("chat", { roomCode, message });
+        socket.emit("chat", { roomCode, message, nickname });
         setMessage("");
       }
     },
-    [message, socket, roomCode],
+    [message, socket, roomCode, nickname],
   );
 
   return {
     roomCode,
     setRoomCode,
+    nickname,
+    setNickname,
     message,
     setMessage,
     messages,
