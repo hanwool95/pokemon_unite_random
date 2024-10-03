@@ -14,6 +14,7 @@ const useSockets = () => {
     // 소켓 서버에 연결
     const skt = io(process.env.NEXT_PUBLIC_SERVER_URL, {
       withCredentials: true,
+      transports: ["websocket", "polling"], // 웹소켓 및 폴링 방식 모두 허용
       extraHeaders: {
         "Access-Control-Allow-Origin": "*",
       },
