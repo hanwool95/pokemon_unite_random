@@ -12,7 +12,12 @@ const useSockets = () => {
 
   useEffect(() => {
     // 소켓 서버에 연결
-    const skt = io(process.env.NEXT_PUBLIC_SERVER_URL);
+    const skt = io(process.env.NEXT_PUBLIC_SERVER_URL, {
+      withCredentials: true,
+      extraHeaders: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
 
     skt.on("roomCreated", (code: string) => {
       setRoomCode(code);
