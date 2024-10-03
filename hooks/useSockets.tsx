@@ -12,7 +12,7 @@ const useSockets = () => {
 
   useEffect(() => {
     // 소켓 서버에 연결
-    const skt = io("http://localhost:4000");
+    const skt = io(process.env.NEXT_PUBLIC_SERVER_URL);
 
     skt.on("roomCreated", (code: string) => {
       setRoomCode(code);
