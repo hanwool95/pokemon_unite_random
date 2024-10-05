@@ -24,6 +24,8 @@ const GameScreen = ({
   sendMessage,
   message,
   setMessage,
+  currentPokemonName,
+  skipRound,
 }: {
   nicknames: string[];
   scores: number[];
@@ -38,6 +40,8 @@ const GameScreen = ({
   sendMessage: (e: React.FormEvent<HTMLFormElement>) => void;
   message: string;
   setMessage: React.Dispatch<SetStateAction<string>>;
+  currentPokemonName: string;
+  skipRound: () => void;
 }) => {
   const [guess, setGuess] = useState("");
   const [hint, setHint] = useState("");
@@ -92,6 +96,7 @@ const GameScreen = ({
             {isMyTurn && (
               <div>
                 <img src={currentImage} alt="포켓몬" className="w-full" />
+                <p className={"text-center text-2xl"}>{currentPokemonName}</p>
               </div>
             )}
             <p className={"py-8 text-3xl"}>힌트: {currentHint}</p>
@@ -116,6 +121,11 @@ const GameScreen = ({
                   힌트 추가
                 </Button>
               </div>
+            )}
+            {isMyTurn && currentHint.length >= 6 && (
+              <Button className={"w-full"} onClick={skipRound}>
+                {"패스!"}
+              </Button>
             )}
           </div>
           {!isMyTurn && (

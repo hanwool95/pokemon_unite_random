@@ -14,6 +14,7 @@ const useSockets = () => {
   const [isHost, setIsHost] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [scores, setScores] = useState<number[]>([]);
+  const [currentPokemonName, setCurrentPokemonName] = useState("");
   const [currentImage, setCurrentImage] = useState<string>(""); // 포켓몬 이미지 URL
   const [currentHint, setCurrentHint] = useState<string>(""); // 현재 힌트
   const [currentTurn, setCurrentTurn] = useState<string>(""); // 현재 차례인 사용자
@@ -74,10 +75,14 @@ const useSockets = () => {
       setGameStarted(true); // 게임 시작
     });
 
-    skt.on("pokemonImage", ({ image }: { image: string }) => {
-      setCurrentImage(image);
-      setCurrentHint("");
-    });
+    skt.on(
+      "pokemonImage",
+      ({ image, name }: { image: string; name: string }) => {
+        setCurrentImage(image);
+        setCurrentPokemonName(name);
+        setCurrentHint("");
+      },
+    );
 
     skt.on("yourTurn", (currentNickname: string) => {
       setCurrentTurn(currentNickname);
@@ -120,6 +125,10 @@ const useSockets = () => {
     },
     [message, socket, roomCode, nickname],
   );
+
+  const skipRound = useCallback(() => {
+    socket.emit("skipRound", { roomCode });
+  }, [socket, roomCode]);
 
   const submitGuess = useCallback(
     (guess: string) => {
@@ -165,6 +174,8 @@ const useSockets = () => {
     addHint,
     isMyTurn,
     gameMessage,
+    currentPokemonName,
+    skipRound,
   };
 };
 
