@@ -17,6 +17,7 @@ const useSockets = () => {
   const [currentImage, setCurrentImage] = useState<string>(""); // 포켓몬 이미지 URL
   const [currentHint, setCurrentHint] = useState<string>(""); // 현재 힌트
   const [currentTurn, setCurrentTurn] = useState<string>(""); // 현재 차례인 사용자
+  const [gameMessage, setGameMessage] = useState("");
 
   useEffect(() => {
     const skt = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
@@ -55,6 +56,13 @@ const useSockets = () => {
 
     skt.on("updateScores", (updatedScores: number[]) => {
       setScores(updatedScores);
+    });
+
+    skt.on("gameMessage", ({ message }: { message: string }) => {
+      setGameMessage(message);
+      setTimeout(() => {
+        setGameMessage("");
+      }, 3000);
     });
 
     skt.on("newHost", (hostId: string) => {
@@ -155,6 +163,7 @@ const useSockets = () => {
     submitGuess,
     addHint,
     isMyTurn,
+    gameMessage,
   };
 };
 

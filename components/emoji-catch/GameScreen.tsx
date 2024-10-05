@@ -12,6 +12,7 @@ const GameScreen = ({
   submitGuess,
   addHint,
   isMyTurn,
+  gameMessage,
 }: {
   nicknames: string[];
   scores: number[];
@@ -21,6 +22,7 @@ const GameScreen = ({
   submitGuess: (guess: string) => void;
   addHint: (hint: string) => void;
   isMyTurn: boolean;
+  gameMessage: string;
 }) => {
   const [guess, setGuess] = useState("");
   const [hint, setHint] = useState("");
@@ -34,13 +36,22 @@ const GameScreen = ({
 
   return (
     <>
-      {showPicker && (
+      {showPicker && !gameMessage && (
         <div
           className={
             "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"
           }
         >
           <EmojiPicker onEmojiClick={onEmojiClick} />
+        </div>
+      )}
+      {!!gameMessage && (
+        <div
+          className={
+            "border border-black bg-white p-5 text-xl w-fit min-w-[320px] absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/3 z-50 whitespace-pre-wrap text-center"
+          }
+        >
+          {gameMessage}
         </div>
       )}
       <div
@@ -59,7 +70,7 @@ const GameScreen = ({
               </div>
             )}
             <p className={"py-8 text-3xl"}>힌트: {currentHint}</p>
-            {isMyTurn && currentHint.length < 4 && (
+            {isMyTurn && currentHint.length < 6 && (
               <div className={"mt-2"}>
                 <input
                   className="p-2 border"

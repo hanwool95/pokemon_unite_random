@@ -28,6 +28,7 @@ const EmojiCatchContainer = () => {
     submitGuess,
     addHint,
     isMyTurn,
+    gameMessage,
   } = useSockets();
 
   if (gameStarted) {
@@ -41,6 +42,7 @@ const EmojiCatchContainer = () => {
         submitGuess={submitGuess}
         addHint={addHint}
         isMyTurn={isMyTurn}
+        gameMessage={gameMessage}
       />
     );
   }
