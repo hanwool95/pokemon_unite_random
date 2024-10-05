@@ -11,8 +11,9 @@ const useSockets = () => {
   >([]);
   const [nicknames, setNicknames] = useState<string[]>([]);
   const [joinedRoom, setJoinedRoom] = useState(false);
-  const [isHost, setIsHost] = useState(false); // 방장 여부
-  const [gameStarted, setGameStarted] = useState(false); // 게임 시작 여부
+  const [isHost, setIsHost] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
+  const [scores, setScores] = useState<number[]>([]);
 
   useEffect(() => {
     const skt = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
@@ -41,15 +42,16 @@ const useSockets = () => {
     );
 
     skt.on("updateUsers", (updatedNicknames: string[]) => {
-      setNicknames(updatedNicknames); // 닉네임 리스트 업데이트
+      setNicknames(updatedNicknames);
     });
 
     skt.on("newHost", (hostId: string) => {
-      setIsHost(skt.id === hostId); // 현재 클라이언트가 방장인지 확인
+      setIsHost(skt.id === hostId);
     });
 
-    skt.on("gameStarted", () => {
-      setGameStarted(true); // 게임 시작 이벤트
+    skt.on("gameStarted", (initialScores: number[]) => {
+      setScores(initialScores); // 초기 점수 설정
+      setGameStarted(true); // 게임 시작
     });
 
     setSocket(skt);
@@ -105,6 +107,7 @@ const useSockets = () => {
     joinedRoom,
     isHost,
     gameStarted,
+    scores,
     nicknames,
   };
 };
