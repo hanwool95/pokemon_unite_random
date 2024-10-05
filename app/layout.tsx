@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "너즐록 섞기",
-  description: "3분 요약 카이사르의 포유나 너즐록 섞어",
+  title: "카이사르의 미니게임 천국",
+  description: "3분 요약 카이사르의 미니게임 홈페이지",
   icons: {
     icon: "/favicon.png",
     shortcut: "/favicon.png",
