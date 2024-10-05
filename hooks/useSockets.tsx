@@ -14,6 +14,9 @@ const useSockets = () => {
   const [isHost, setIsHost] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [scores, setScores] = useState<number[]>([]);
+  const [currentImage, setCurrentImage] = useState<string>(""); // 포켓몬 이미지 URL
+  const [currentHint, setCurrentHint] = useState<string>(""); // 현재 힌트
+  const [currentTurn, setCurrentTurn] = useState<string>(""); // 현재 차례인 사용자
 
   useEffect(() => {
     const skt = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
@@ -31,6 +34,7 @@ const useSockets = () => {
 
     skt.on("joinedRoom", (code: string) => {
       setRoomCode(code);
+      setScores((prev) => [...prev, 0]);
       setJoinedRoom(true);
     });
 
@@ -52,6 +56,14 @@ const useSockets = () => {
     skt.on("gameStarted", (initialScores: number[]) => {
       setScores(initialScores); // 초기 점수 설정
       setGameStarted(true); // 게임 시작
+    });
+
+    skt.on("pokemonImage", ({ image }: { image: string }) => {
+      setCurrentImage(image);
+    });
+
+    skt.on("yourTurn", (currentNickname: string) => {
+      setCurrentTurn(currentNickname);
     });
 
     setSocket(skt);
@@ -92,6 +104,20 @@ const useSockets = () => {
     [message, socket, roomCode, nickname],
   );
 
+  const submitGuess = useCallback(
+    (guess: string) => {
+      socket.emit("submitGuess", { roomCode, guess });
+    },
+    [socket, roomCode],
+  );
+
+  const addHint = useCallback(
+    (hint: string) => {
+      socket.emit("addHint", { roomCode, hint });
+    },
+    [socket, roomCode],
+  );
+
   return {
     roomCode,
     setRoomCode,
@@ -109,6 +135,12 @@ const useSockets = () => {
     gameStarted,
     scores,
     nicknames,
+    currentImage,
+    currentHint,
+    setCurrentHint,
+    currentTurn,
+    submitGuess,
+    addHint,
   };
 };
 

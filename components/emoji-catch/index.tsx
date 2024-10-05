@@ -22,10 +22,25 @@ const EmojiCatchContainer = () => {
     gameStarted,
     scores,
     nicknames,
+    currentImage,
+    currentHint,
+    currentTurn,
+    submitGuess,
+    addHint,
   } = useSockets();
 
   if (gameStarted) {
-    return <GameScreen nicknames={nicknames} scores={scores} />;
+    return (
+      <GameScreen
+        nicknames={nicknames}
+        scores={scores}
+        currentImage={currentImage}
+        currentHint={currentHint}
+        currentTurn={currentTurn}
+        submitGuess={submitGuess}
+        addHint={addHint}
+      />
+    );
   }
 
   return (
