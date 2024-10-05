@@ -128,7 +128,9 @@ const GameScreen = ({
               />
               <Button
                 className={"w-full mt-2"}
-                onClick={() => submitGuess(guess)}
+                onClick={() => {
+                  submitGuess(guess);
+                }}
               >
                 정답 제출
               </Button>

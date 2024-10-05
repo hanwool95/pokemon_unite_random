@@ -124,8 +124,9 @@ const useSockets = () => {
   const submitGuess = useCallback(
     (guess: string) => {
       socket.emit("submitGuess", { roomCode, guess });
+      socket.emit("chat", { roomCode, message: `정답! ${guess}`, nickname });
     },
-    [socket, roomCode],
+    [socket, roomCode, nickname],
   );
 
   const addHint = useCallback(
