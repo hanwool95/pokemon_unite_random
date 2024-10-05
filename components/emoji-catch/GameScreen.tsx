@@ -96,14 +96,19 @@ const GameScreen = ({
         </div>
       )}
       <div
-        className="flex w-full h-full py-8"
+        className="flex w-full h-full py-8 px-4 max-lg mx-auto"
         onClick={() => {
           if (showPicker) setShowPicker(false);
         }}
       >
-        <ScoreBoard nicknames={nicknames} scores={scores} messages={messages} />
-        <div className={"flex flex-col mx-auto"}>
-          <div className="p-4 bg-gray-100 w-[320px]">
+        <ScoreBoard
+          nicknames={nicknames}
+          scores={scores}
+          messages={messages}
+          currentTurn={currentTurn}
+        />
+        <div className={"flex flex-col mx-auto w-full ml-2"}>
+          <div className="p-4 bg-gray-100 w-full max-w-[320px] mx-auto">
             <h2>현재 차례: {currentTurn}</h2>
             {isMyTurn && (
               <div>
@@ -115,7 +120,7 @@ const GameScreen = ({
               className={"py-8 text-3xl text-center"}
             >{`${currentHint || "출제자 힌트 입력중"}`}</p>
             {isMyTurn && currentHint.length < 6 && (
-              <div className={"mt-2"}>
+              <div className={"mt-2 w-full flex flex-col"}>
                 <input
                   className="p-2 border"
                   value={hint}
@@ -127,7 +132,7 @@ const GameScreen = ({
                   maxLength={1}
                 />
                 <Button
-                  className={"ml-2"}
+                  className={"ml-2 mx-auto mt-4"}
                   onClick={() => {
                     addHint(hint);
                     setHint("");
@@ -164,11 +169,11 @@ const GameScreen = ({
             </div>
           )}
         </div>
-        {/* 채팅창 */}
-        <div className="absolute bottom-0 right-0 w-[300px] bg-white shadow-lg p-4 border">
-          {/* 채팅창 접기 버튼 */}
+        <div
+          className={`absolute bottom-0 right-0 ${isChatOpen ? "w-[300px]" : "w-[50px]"} bg-white shadow-lg p-4 border`}
+        >
           <div className="flex justify-between items-center mb-2">
-            <h3 className="font-bold">채팅방</h3>
+            {isChatOpen && <h3 className="font-bold">채팅방</h3>}
             <BottomArrow
               onClick={() => setIsChatOpen(!isChatOpen)}
               isRotated={!isChatOpen}

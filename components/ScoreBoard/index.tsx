@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 
-const GameScreen = ({
+const ScoreBoard = ({
   nicknames,
   scores,
   messages,
+  currentTurn,
 }: {
   nicknames: string[];
   scores: number[];
   messages: { sender: string; message: string }[];
+  currentTurn?: string;
 }) => {
   const [visibleMessages, setVisibleMessages] = useState<string[]>([]); // 각 사용자의 말풍선 상태 관리
 
@@ -31,7 +33,10 @@ const GameScreen = ({
   return (
     <div className="flex flex-col w-[120px] h-full whitespace-nowrap gap-4">
       {nicknames.map((name, idx) => (
-        <div key={idx} className="w-1/8 p-4 border relative">
+        <div
+          key={idx}
+          className={`w-1/8 p-4 border relative rounded-xl ${currentTurn === name ? "border-4 border-black" : ""} }`}
+        >
           <h2 className="text-lg font-bold">{name}</h2>
           <p>점수: {scores[idx]}</p>
 
@@ -50,4 +55,4 @@ const GameScreen = ({
   );
 };
 
-export default GameScreen;
+export default ScoreBoard;

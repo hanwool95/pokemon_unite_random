@@ -49,10 +49,10 @@ const EmojiCatchContainer = () => {
   }
 
   return (
-    <div className="flex mx-auto w-[720px] mt-20">
+    <div className="flex mx-auto w-fit min-w-[360px] h-fit">
       {joinedRoom && (
-        <div className="w-1/4 p-4 bg-gray-100">
-          <h2 className="text-blue-500">참여자 리스트</h2>
+        <div className="w-1/4 p-4 bg-gray-100 mt-4">
+          <h2 className="text-blue-500">참여자</h2>
           <ul>
             {nicknames.map((name, idx) => (
               <li key={idx}>{name}</li>
@@ -61,8 +61,7 @@ const EmojiCatchContainer = () => {
         </div>
       )}
 
-      <div className="w-3/4 p-4">
-        <h1 className={"text-xl"}>포켓몬 캐치마인드</h1>
+      <div className="p-4 bg-gray-100 mt-4 mx-auto">
         {joinedRoom ? (
           <>
             <div className={"flex"}>
@@ -119,7 +118,7 @@ const EmojiCatchContainer = () => {
               <div className={"mt-4"}>
                 <input
                   type="text"
-                  className="border p-2"
+                  className="border p-2 w-32"
                   value={roomCode}
                   onChange={(e) => setRoomCode(e.target.value)}
                   placeholder="방 코드 입력"
@@ -136,7 +135,7 @@ const EmojiCatchContainer = () => {
             {!joinByRoomCode && (
               <Button
                 disabled={isLoading}
-                className="my-5 border p-2 rounded-xl !bg-black"
+                className="my-5 border p-2 rounded-xl !bg-black w-full"
                 onClick={createRoom}
               >
                 방 만들기
