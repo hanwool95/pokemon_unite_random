@@ -51,15 +51,15 @@ const GameScreen = ({
       >
         <ScoreBoard nicknames={nicknames} scores={scores} />
         <div className={"flex flex-col mx-auto"}>
-          <div className="p-4 bg-gray-100">
+          <div className="p-4 bg-gray-100 w-[320px]">
             <h2>현재 차례: {currentTurn}</h2>
             {isMyTurn && (
               <div>
                 <img src={currentImage} alt="포켓몬" className="w-full" />
               </div>
             )}
-            <p className={"py-16 text-2xl"}>힌트: {currentHint}</p>
-            {isMyTurn && (
+            <p className={"py-8 text-3xl"}>힌트: {currentHint}</p>
+            {isMyTurn && currentHint.length < 4 && (
               <div className={"mt-2"}>
                 <input
                   className="p-2 border"
@@ -82,20 +82,22 @@ const GameScreen = ({
               </div>
             )}
           </div>
-          <div className="w-full p-4">
-            <input
-              className="p-2 border w-full"
-              value={guess}
-              onChange={(e) => setGuess(e.target.value)}
-              placeholder="정답 입력"
-            />
-            <Button
-              className={"w-full mt-2"}
-              onClick={() => submitGuess(guess)}
-            >
-              정답 제출
-            </Button>
-          </div>
+          {!isMyTurn && (
+            <div className="w-full p-4">
+              <input
+                className="p-2 border w-full"
+                value={guess}
+                onChange={(e) => setGuess(e.target.value)}
+                placeholder="정답 입력"
+              />
+              <Button
+                className={"w-full mt-2"}
+                onClick={() => submitGuess(guess)}
+              >
+                정답 제출
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </>

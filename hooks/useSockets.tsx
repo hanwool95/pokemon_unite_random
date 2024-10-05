@@ -53,6 +53,10 @@ const useSockets = () => {
       setNicknames(updatedNicknames);
     });
 
+    skt.on("updateScores", (updatedScores: number[]) => {
+      setScores(updatedScores);
+    });
+
     skt.on("newHost", (hostId: string) => {
       setIsHost(skt.id === hostId);
     });
@@ -64,6 +68,7 @@ const useSockets = () => {
 
     skt.on("pokemonImage", ({ image }: { image: string }) => {
       setCurrentImage(image);
+      setCurrentHint("");
     });
 
     skt.on("yourTurn", (currentNickname: string) => {
