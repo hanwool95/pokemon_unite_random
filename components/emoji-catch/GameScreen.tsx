@@ -3,6 +3,7 @@ import Button from "@/components/button";
 import React, {
   Dispatch,
   SetStateAction,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -63,6 +64,18 @@ const GameScreen = ({
     }
   }, [messages]);
 
+  const suggestGuess = useCallback(() => {
+    submitGuess(guess);
+    setGuess(""); // 제출 후 입력 필드 초기화
+  }, [guess, setGuess, submitGuess]);
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // 기본 엔터 동작 방지
+      suggestGuess();
+    }
+  };
+
   return (
     <>
       {showPicker && !gameMessage && (
@@ -99,7 +112,9 @@ const GameScreen = ({
                 <p className={"text-center text-2xl"}>{currentPokemonName}</p>
               </div>
             )}
-            <p className={"py-8 text-3xl"}>힌트: {currentHint}</p>
+            <p
+              className={"py-8 text-3xl text-center"}
+            >{`${currentHint || "출제자 힌트 입력중"}`}</p>
             {isMyTurn && currentHint.length < 6 && (
               <div className={"mt-2"}>
                 <input
@@ -116,6 +131,7 @@ const GameScreen = ({
                   className={"ml-2"}
                   onClick={() => {
                     addHint(hint);
+                    setHint("");
                   }}
                 >
                   힌트 추가
@@ -134,12 +150,14 @@ const GameScreen = ({
                 className="p-2 border w-full"
                 value={guess}
                 onChange={(e) => setGuess(e.target.value)}
+                onKeyDown={handleKeyPress}
                 placeholder="정답 입력"
               />
               <Button
+                type={"submit"}
                 className={"w-full mt-2"}
                 onClick={() => {
-                  submitGuess(guess);
+                  suggestGuess();
                 }}
               >
                 정답 제출
