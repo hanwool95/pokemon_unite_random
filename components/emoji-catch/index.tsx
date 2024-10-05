@@ -17,12 +17,17 @@ const EmojiCatchContainer = () => {
     createRoom,
     joinedRoom,
     nicknames,
+    startGame,
+    gameStarted,
+    isHost,
   } = useSockets();
+
+  if (gameStarted) return <></>;
 
   return (
     <div className="flex mx-auto w-[720px] mt-20">
       <div className="w-1/4 p-4 bg-gray-100">
-        <h2>닉네임 리스트</h2>
+        <h2 className={"text-blue-500"}>닉네임 리스트</h2>
         <ul>
           {nicknames.map((name, idx) => (
             <li key={idx}>{name}</li>
@@ -34,7 +39,7 @@ const EmojiCatchContainer = () => {
         {joinedRoom ? (
           <>
             <h2>Room Code: {roomCode}</h2>
-            <ul>
+            <ul className={"mt-5"}>
               {messages.map((msg, idx) => (
                 <li key={idx}>
                   {msg.sender}: {msg.message}
@@ -52,6 +57,11 @@ const EmojiCatchContainer = () => {
                 전송하기
               </Button>
             </form>
+            {isHost && (
+              <Button className={"mt-5 w-full"} onClick={startGame}>
+                게임 시작하기
+              </Button>
+            )}
           </>
         ) : (
           <div>

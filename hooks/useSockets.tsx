@@ -9,8 +9,10 @@ const useSockets = () => {
   const [messages, setMessages] = useState<
     { sender: string; message: string }[]
   >([]);
-  const [nicknames, setNicknames] = useState<string[]>([]); // 닉네임 리스트 추가
+  const [nicknames, setNicknames] = useState<string[]>([]);
   const [joinedRoom, setJoinedRoom] = useState(false);
+  const [isHost, setIsHost] = useState(false); // 방장 여부
+  const [gameStarted, setGameStarted] = useState(false); // 게임 시작 여부
 
   useEffect(() => {
     const skt = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
@@ -42,8 +44,12 @@ const useSockets = () => {
       setNicknames(updatedNicknames); // 닉네임 리스트 업데이트
     });
 
-    skt.on("error", (errorMessage: string) => {
-      alert(errorMessage);
+    skt.on("newHost", (hostId: string) => {
+      setIsHost(skt.id === hostId); // 현재 클라이언트가 방장인지 확인
+    });
+
+    skt.on("gameStarted", () => {
+      setGameStarted(true); // 게임 시작 이벤트
     });
 
     setSocket(skt);
@@ -69,6 +75,10 @@ const useSockets = () => {
     socket.emit("joinRoom", { roomCode, nickname });
   }, [socket, roomCode, nickname]);
 
+  const startGame = useCallback(() => {
+    socket.emit("startGame", { roomCode });
+  }, [socket, roomCode]);
+
   const sendMessage = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -91,8 +101,11 @@ const useSockets = () => {
     sendMessage,
     createRoom,
     joinRoom,
+    startGame,
     joinedRoom,
-    nicknames, // 닉네임 리스트 반환
+    isHost,
+    gameStarted,
+    nicknames,
   };
 };
 
