@@ -49,6 +49,11 @@ const useSockets = () => {
       },
     );
 
+    skt.on("error", (errorMessage: string) => {
+      alert(errorMessage);
+      setIsLoading(false);
+    });
+
     skt.on("addHint", ({ hint }: { hint: string }) => {
       setCurrentHint(hint);
     });
