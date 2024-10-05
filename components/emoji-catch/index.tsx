@@ -3,7 +3,8 @@
 import useSockets from "@/hooks/useSockets";
 import Button from "@/components/button";
 import GameScreen from "@/components/emoji-catch/GameScreen";
-import { useState } from "react";
+import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const EmojiCatchContainer = () => {
   const props = useSockets();
@@ -25,6 +26,25 @@ const EmojiCatchContainer = () => {
     nicknames,
     isLoading,
   } = props;
+
+  const searchParams = useSearchParams();
+
+  // 쿼리 파라미터에서 roomCode 가져오기
+  useEffect(() => {
+    const queryRoomCode = searchParams.get("code");
+    if (queryRoomCode) {
+      setRoomCode(queryRoomCode as string); // roomCode 자동 설정
+    }
+  }, [searchParams, setRoomCode]);
+
+  // 닉네임 입력 후 방 참가
+  const handleJoinRoom = () => {
+    if (nickname.trim()) {
+      joinRoom();
+    } else {
+      alert("닉네임을 입력해주세요.");
+    }
+  };
 
   if (gameStarted) {
     return <GameScreen {...props} />;
@@ -87,30 +107,43 @@ const EmojiCatchContainer = () => {
                 onChange={(e) => setNickname(e.target.value)}
                 placeholder="닉네임 입력"
               />
+              {roomCode && (
+                <Button
+                  disabled={isLoading}
+                  className="mt-4 w-full"
+                  onClick={handleJoinRoom}
+                >
+                  방 참가하기
+                </Button>
+              )}
             </div>
-            <div className={"mt-4"}>
-              <input
-                type="text"
-                className="border p-2"
-                value={roomCode}
-                onChange={(e) => setRoomCode(e.target.value)}
-                placeholder="방 코드 입력"
-              />
+            {!roomCode && (
+              <div className={"mt-4"}>
+                <input
+                  type="text"
+                  className="border p-2"
+                  value={roomCode}
+                  onChange={(e) => setRoomCode(e.target.value)}
+                  placeholder="방 코드 입력"
+                />
+                <Button
+                  disabled={isLoading}
+                  className="border ml-2 p-2 rounded-xl"
+                  onClick={joinRoom}
+                >
+                  방 참가하기
+                </Button>
+              </div>
+            )}
+            {!roomCode && (
               <Button
                 disabled={isLoading}
-                className="border ml-2 p-2 rounded-xl"
-                onClick={joinRoom}
+                className="my-5 border p-2 rounded-xl"
+                onClick={createRoom}
               >
-                방 참가하기
+                방 만들기
               </Button>
-            </div>
-            <Button
-              disabled={isLoading}
-              className="my-5 border p-2 rounded-xl"
-              onClick={createRoom}
-            >
-              방 만들기
-            </Button>
+            )}
           </div>
         )}
       </div>
