@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import io from "socket.io-client";
 
 const useSockets = () => {
@@ -44,6 +44,10 @@ const useSockets = () => {
         setMessages((prev) => [...prev, { sender, message }]);
       },
     );
+
+    skt.on("addHint", ({ hint }: { hint: string }) => {
+      setCurrentHint(hint);
+    });
 
     skt.on("updateUsers", (updatedNicknames: string[]) => {
       setNicknames(updatedNicknames);
@@ -118,6 +122,10 @@ const useSockets = () => {
     [socket, roomCode],
   );
 
+  const isMyTurn = useMemo(() => {
+    return nickname === currentTurn;
+  }, [nickname, currentTurn]);
+
   return {
     roomCode,
     setRoomCode,
@@ -141,6 +149,7 @@ const useSockets = () => {
     currentTurn,
     submitGuess,
     addHint,
+    isMyTurn,
   };
 };
 
