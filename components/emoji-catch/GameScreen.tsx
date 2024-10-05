@@ -48,16 +48,15 @@ const GameScreen = ({
   const [hint, setHint] = useState("");
 
   const [showPicker, setShowPicker] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(true); // 채팅창이 열려있는지 상태를 관리
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const onEmojiClick = (emojiObject: EmojiClickData, event: MouseEvent) => {
-    setHint(emojiObject.emoji); // 이모티콘을 입력 필드에 설정
-    setShowPicker(false); // 선택 후 이모티콘 선택기 닫기
+    setHint(emojiObject.emoji);
+    setShowPicker(false);
   };
 
   const chatEndRef = useRef<HTMLDivElement | null>(null); // 채팅 끝 위치를 참조할 ref
 
-  // messages가 변경될 때마다 자동으로 스크롤을 맨 아래로 이동
   useEffect(() => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: "smooth" });
