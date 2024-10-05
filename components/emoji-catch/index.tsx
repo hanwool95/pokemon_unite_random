@@ -5,6 +5,7 @@ import Button from "@/components/button";
 import GameScreen from "@/components/emoji-catch/GameScreen";
 
 const EmojiCatchContainer = () => {
+  const props = useSockets();
   const {
     roomCode,
     setRoomCode,
@@ -20,31 +21,11 @@ const EmojiCatchContainer = () => {
     joinedRoom,
     isHost,
     gameStarted,
-    scores,
     nicknames,
-    currentImage,
-    currentHint,
-    currentTurn,
-    submitGuess,
-    addHint,
-    isMyTurn,
-    gameMessage,
-  } = useSockets();
+  } = props;
 
   if (gameStarted) {
-    return (
-      <GameScreen
-        nicknames={nicknames}
-        scores={scores}
-        currentImage={currentImage}
-        currentHint={currentHint}
-        currentTurn={currentTurn}
-        submitGuess={submitGuess}
-        addHint={addHint}
-        isMyTurn={isMyTurn}
-        gameMessage={gameMessage}
-      />
-    );
+    return <GameScreen {...props} />;
   }
 
   return (
