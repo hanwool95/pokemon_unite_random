@@ -36,7 +36,7 @@ const GameScreen = ({
           <p>점수: {scores[idx]}</p>
 
           {visibleMessages.includes(name) && (
-            <div className="absolute right-0 top-0 bg-gray-200 text-black p-2 rounded-md shadow-lg">
+            <div className="absolute -right-16 top-10 bg-gray-200 text-black p-2 rounded-md shadow-lg">
               {
                 messages.filter((msg) => msg.sender === name).slice(-1)[0]
                   .message
