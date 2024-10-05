@@ -3,7 +3,7 @@
 import useSockets from "@/hooks/useSockets";
 import Button from "@/components/button";
 import GameScreen from "@/components/emoji-catch/GameScreen";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const EmojiCatchContainer = () => {
@@ -13,10 +13,6 @@ const EmojiCatchContainer = () => {
     setRoomCode,
     nickname,
     setNickname,
-    message,
-    setMessage,
-    messages,
-    sendMessage,
     joinRoom,
     createRoom,
     startGame,
@@ -28,12 +24,14 @@ const EmojiCatchContainer = () => {
   } = props;
 
   const searchParams = useSearchParams();
+  const [joinByRoomCode, setJoinByRoomCode] = useState(false);
 
   // 쿼리 파라미터에서 roomCode 가져오기
   useEffect(() => {
     const queryRoomCode = searchParams.get("code");
     if (queryRoomCode) {
       setRoomCode(queryRoomCode as string); // roomCode 자동 설정
+      setJoinByRoomCode(true);
     }
   }, [searchParams, setRoomCode]);
 
@@ -67,25 +65,25 @@ const EmojiCatchContainer = () => {
         <h1 className={"text-xl"}>포켓몬 캐치마인드</h1>
         {joinedRoom ? (
           <>
-            <h2>Room Code: {roomCode}</h2>
-            <ul className="mt-5">
-              {messages.map((msg, idx) => (
-                <li key={idx}>
-                  {msg.sender}: {msg.message}
-                </li>
-              ))}
-            </ul>
-            <form onSubmit={sendMessage}>
-              <input
-                className="p-2 border"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                autoComplete="off"
-              />
-              <Button className="ml-2" type="submit">
-                전송하기
+            <div className={"flex"}>
+              <h2 className={"align-middle my-auto"}>방 코드: {roomCode}</h2>
+              <Button
+                className={"ml-2"}
+                onClick={() => {
+                  const inviteLink = `${window.location.href}?code=${roomCode}`;
+                  navigator.clipboard
+                    .writeText(inviteLink)
+                    .then(() => {
+                      alert("초대 링크가 복사되었습니다!");
+                    })
+                    .catch((err) => {
+                      console.error("초대 링크 복사 중 오류 발생:", err);
+                    });
+                }}
+              >
+                초대 링크 복사
               </Button>
-            </form>
+            </div>
             {isHost && (
               <Button
                 disabled={nicknames.length < 2}
@@ -107,7 +105,7 @@ const EmojiCatchContainer = () => {
                 onChange={(e) => setNickname(e.target.value)}
                 placeholder="닉네임 입력"
               />
-              {roomCode && (
+              {joinByRoomCode && (
                 <Button
                   disabled={isLoading}
                   className="mt-4 w-full"
@@ -117,7 +115,7 @@ const EmojiCatchContainer = () => {
                 </Button>
               )}
             </div>
-            {!roomCode && (
+            {!joinByRoomCode && (
               <div className={"mt-4"}>
                 <input
                   type="text"
@@ -135,10 +133,10 @@ const EmojiCatchContainer = () => {
                 </Button>
               </div>
             )}
-            {!roomCode && (
+            {!joinByRoomCode && (
               <Button
                 disabled={isLoading}
-                className="my-5 border p-2 rounded-xl"
+                className="my-5 border p-2 rounded-xl !bg-black"
                 onClick={createRoom}
               >
                 방 만들기
