@@ -3,6 +3,7 @@
 import useSockets from "@/hooks/useSockets";
 import Button from "@/components/button";
 import GameScreen from "@/components/emoji-catch/GameScreen";
+import { useState } from "react";
 
 const EmojiCatchContainer = () => {
   const props = useSockets();
@@ -22,6 +23,7 @@ const EmojiCatchContainer = () => {
     isHost,
     gameStarted,
     nicknames,
+    isLoading,
   } = props;
 
   if (gameStarted) {
@@ -30,16 +32,19 @@ const EmojiCatchContainer = () => {
 
   return (
     <div className="flex mx-auto w-[720px] mt-20">
-      <div className="w-1/4 p-4 bg-gray-100">
-        <h2 className="text-blue-500">닉네임 리스트</h2>
-        <ul>
-          {nicknames.map((name, idx) => (
-            <li key={idx}>{name}</li>
-          ))}
-        </ul>
-      </div>
+      {joinedRoom && (
+        <div className="w-1/4 p-4 bg-gray-100">
+          <h2 className="text-blue-500">참여자 리스트</h2>
+          <ul>
+            {nicknames.map((name, idx) => (
+              <li key={idx}>{name}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <div className="w-3/4 p-4">
-        <h1>포켓몬 캐치마인드</h1>
+        <h1 className={"text-xl"}>포켓몬 캐치마인드</h1>
         {joinedRoom ? (
           <>
             <h2>Room Code: {roomCode}</h2>
@@ -62,7 +67,11 @@ const EmojiCatchContainer = () => {
               </Button>
             </form>
             {isHost && (
-              <Button className="mt-5 w-full" onClick={startGame}>
+              <Button
+                disabled={nicknames.length < 2}
+                className="mt-5 w-full"
+                onClick={startGame}
+              >
                 게임 시작하기
               </Button>
             )}
@@ -70,6 +79,7 @@ const EmojiCatchContainer = () => {
         ) : (
           <div>
             <div>
+              <h2 className={"mt-2"}>{"닉네임을 입력해주세요"}</h2>
               <input
                 type="text"
                 className="border p-2"
@@ -78,10 +88,7 @@ const EmojiCatchContainer = () => {
                 placeholder="닉네임 입력"
               />
             </div>
-            <Button className="my-5 border p-2 rounded-xl" onClick={createRoom}>
-              방 만들기
-            </Button>
-            <div>
+            <div className={"mt-4"}>
               <input
                 type="text"
                 className="border p-2"
@@ -89,10 +96,21 @@ const EmojiCatchContainer = () => {
                 onChange={(e) => setRoomCode(e.target.value)}
                 placeholder="방 코드 입력"
               />
-              <Button className="border ml-2 p-2 rounded-xl" onClick={joinRoom}>
+              <Button
+                disabled={isLoading}
+                className="border ml-2 p-2 rounded-xl"
+                onClick={joinRoom}
+              >
                 방 참가하기
               </Button>
             </div>
+            <Button
+              disabled={isLoading}
+              className="my-5 border p-2 rounded-xl"
+              onClick={createRoom}
+            >
+              방 만들기
+            </Button>
           </div>
         )}
       </div>

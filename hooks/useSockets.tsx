@@ -20,6 +20,8 @@ const useSockets = () => {
   const [currentTurn, setCurrentTurn] = useState<string>(""); // 현재 차례인 사용자
   const [gameMessage, setGameMessage] = useState("");
 
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const skt = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
       withCredentials: true,
@@ -100,6 +102,7 @@ const useSockets = () => {
       alert("닉네임을 입력해주세요.");
       return;
     }
+    setIsLoading(true);
     socket.emit("createRoom", { nickname });
   }, [socket, nickname]);
 
@@ -108,6 +111,7 @@ const useSockets = () => {
       alert("닉네임을 입력해주세요.");
       return;
     }
+    setIsLoading(true);
     socket.emit("joinRoom", { roomCode, nickname });
   }, [socket, roomCode, nickname]);
 
@@ -176,6 +180,7 @@ const useSockets = () => {
     gameMessage,
     currentPokemonName,
     skipRound,
+    isLoading,
   };
 };
 
