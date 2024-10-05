@@ -9,10 +9,10 @@ const useSockets = () => {
   const [messages, setMessages] = useState<
     { sender: string; message: string }[]
   >([]);
+  const [nicknames, setNicknames] = useState<string[]>([]); // 닉네임 리스트 추가
   const [joinedRoom, setJoinedRoom] = useState(false);
 
   useEffect(() => {
-    // 소켓 서버에 연결
     const skt = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
       withCredentials: true,
       transports: ["websocket", "polling"],
@@ -38,6 +38,14 @@ const useSockets = () => {
       },
     );
 
+    skt.on("updateUsers", (updatedNicknames: string[]) => {
+      setNicknames(updatedNicknames); // 닉네임 리스트 업데이트
+    });
+
+    skt.on("error", (errorMessage: string) => {
+      alert(errorMessage);
+    });
+
     setSocket(skt);
 
     return () => {
@@ -58,7 +66,6 @@ const useSockets = () => {
       alert("닉네임을 입력해주세요.");
       return;
     }
-    console.log("join room");
     socket.emit("joinRoom", { roomCode, nickname });
   }, [socket, roomCode, nickname]);
 
@@ -85,6 +92,7 @@ const useSockets = () => {
     createRoom,
     joinRoom,
     joinedRoom,
+    nicknames, // 닉네임 리스트 반환
   };
 };
 
