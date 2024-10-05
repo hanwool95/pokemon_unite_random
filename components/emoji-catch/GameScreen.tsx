@@ -8,6 +8,7 @@ import React, {
   useState,
 } from "react";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
+import { BottomArrow } from "@/components/svgs";
 
 const GameScreen = ({
   nicknames,
@@ -42,6 +43,7 @@ const GameScreen = ({
   const [hint, setHint] = useState("");
 
   const [showPicker, setShowPicker] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(true); // 채팅창이 열려있는지 상태를 관리
 
   const onEmojiClick = (emojiObject: EmojiClickData, event: MouseEvent) => {
     setHint(emojiObject.emoji); // 이모티콘을 입력 필드에 설정
@@ -133,35 +135,50 @@ const GameScreen = ({
             </div>
           )}
         </div>
-        {/* 채팅방 */}
-        <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-white shadow-lg p-4 border overflow-hidden">
-          <div className="h-[calc(100%-60px)] overflow-y-auto mb-2">
-            <ul className="mt-5">
-              {messages.map((msg, idx) => (
-                <li key={idx} className="mb-1">
-                  <strong>{msg.sender}</strong>: {msg.message}
-                </li>
-              ))}
-              <div ref={chatEndRef} />
-            </ul>
-          </div>
-          <form
-            onSubmit={(e) => {
-              sendMessage(e);
-              setMessage("");
-            }}
-            className="flex items-center"
-          >
-            <input
-              className="p-2 border flex-grow"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              autoComplete="off"
+        {/* 채팅창 */}
+        <div className="absolute bottom-0 right-0 w-[300px] bg-white shadow-lg p-4 border">
+          {/* 채팅창 접기 버튼 */}
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="font-bold">채팅방</h3>
+            <BottomArrow
+              onClick={() => setIsChatOpen(!isChatOpen)}
+              isRotated={!isChatOpen}
             />
-            <Button className="ml-2" type="submit">
-              전송
-            </Button>
-          </form>
+          </div>
+
+          {/* 채팅 메시지 영역 */}
+          {isChatOpen && (
+            <>
+              <div className="h-[300px] overflow-y-auto mb-2">
+                <ul className="mt-5">
+                  {messages.map((msg, idx) => (
+                    <li key={idx} className="mb-1">
+                      <strong>{msg.sender}</strong>: {msg.message}
+                    </li>
+                  ))}
+                  <div ref={chatEndRef} />
+                </ul>
+              </div>
+              {/* 채팅 입력 폼 */}
+              <form
+                onSubmit={(e) => {
+                  sendMessage(e);
+                  setMessage("");
+                }}
+                className="flex items-center"
+              >
+                <input
+                  className="p-2 border flex-grow"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  autoComplete="off"
+                />
+                <Button className="ml-2" type="submit">
+                  전송
+                </Button>
+              </form>
+            </>
+          )}
         </div>
       </div>
     </>
