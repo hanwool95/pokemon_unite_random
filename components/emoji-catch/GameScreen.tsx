@@ -1,12 +1,11 @@
 import ScoreBoard from "@/components/ScoreBoard";
 import Button from "@/components/button";
 import React, {
-  Dispatch,
-  SetStateAction,
-  useCallback,
   useEffect,
   useRef,
   useState,
+  useCallback,
+  SetStateAction,
 } from "react";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { BottomArrow } from "@/components/svgs";
@@ -44,18 +43,44 @@ const GameScreen = ({
   currentPokemonName: string;
   skipRound: () => void;
 }) => {
+  const TIME_LIMIT = 30;
+
   const [guess, setGuess] = useState("");
   const [hint, setHint] = useState("");
 
   const [showPicker, setShowPicker] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(TIME_LIMIT); // 30초 타이머
+  const [playSound, setPlaySound] = useState(false); // 10초 남았을 때 사운드 재생 여부
+
+  const chatEndRef = useRef<HTMLDivElement | null>(null); // 채팅 끝 위치를 참조할 ref
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const tickSound = useRef<HTMLAudioElement | null>(null); // 사운드 재생을 위한 Ref
 
   const onEmojiClick = (emojiObject: EmojiClickData, event: MouseEvent) => {
     setHint(emojiObject.emoji);
     setShowPicker(false);
   };
 
-  const chatEndRef = useRef<HTMLDivElement | null>(null); // 채팅 끝 위치를 참조할 ref
+  // 타이머 로직
+  useEffect(() => {
+    if (timeLeft > 0) {
+      timerRef.current = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+    } else {
+      if (isMyTurn) skipRound(); // 시간이 끝나면 다음 차례로 넘어감
+      setTimeLeft(TIME_LIMIT); // 새로운 차례가 오면 타이머 초기화
+      setPlaySound(false);
+    }
+
+    // 10초 남았을 때부터 사운드 재생
+    if (timeLeft === 7 && tickSound.current) {
+      setPlaySound(true);
+      tickSound.current.play();
+    }
+
+    return () => clearTimeout(timerRef.current!);
+  }, [timeLeft]);
 
   useEffect(() => {
     if (chatEndRef.current) {
@@ -77,6 +102,20 @@ const GameScreen = ({
 
   return (
     <>
+      {/* 타이머 진행 바 */}
+      <div className="relative w-full h-6 bg-gray-300 mt-4">
+        <div
+          className="absolute left-0 top-0 h-full bg-green-500 transition-all"
+          style={{ width: `${(timeLeft / 30) * 100}%` }}
+        />
+        <p className="absolute left-1/2 top-0 transform -translate-x-1/2 text-white font-bold">
+          {timeLeft}초 남음
+        </p>
+      </div>
+
+      {/* 사운드 파일 로드 */}
+      <audio ref={tickSound} src="/tick-tock-sound.mp3" loop={false} />
+
       {showPicker && !gameMessage && (
         <div
           className={
@@ -170,7 +209,9 @@ const GameScreen = ({
           )}
         </div>
         <div
-          className={`absolute bottom-0 right-0 ${isChatOpen ? "w-[300px]" : "w-[50px]"} bg-white shadow-lg p-4 border`}
+          className={`absolute bottom-0 right-0 ${
+            isChatOpen ? "w-[300px]" : "w-[50px]"
+          } bg-white shadow-lg p-4 border`}
         >
           <div className="flex justify-between items-center mb-2">
             {isChatOpen && <h3 className="font-bold">채팅방</h3>}
