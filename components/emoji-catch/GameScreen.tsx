@@ -118,7 +118,7 @@ const GameScreen = ({
           if (showPicker) setShowPicker(false);
         }}
       >
-        {nicknames.length > 0 && scores.length > 0 && (
+        {nicknames && scores && nicknames.length > 0 && scores.length > 0 && (
           <ScoreBoard
             nicknames={nicknames?.slice(0, 4)}
             scores={scores?.slice(0, 4)}
