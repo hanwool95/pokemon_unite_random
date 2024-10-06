@@ -104,7 +104,7 @@ const GameScreen = ({
       <div className="relative w-full h-6 bg-gray-300 mt-4">
         <div
           className="absolute left-0 top-0 h-full bg-green-500 transition-all"
-          style={{ width: `${(timeLeft / 30) * 100}%` }}
+          style={{ width: `${(timeLeft / TIME_LIMIT) * 100}%` }}
         />
         <p className="absolute left-1/2 top-0 transform -translate-x-1/2 text-white font-bold">
           {timeLeft}초 남음
