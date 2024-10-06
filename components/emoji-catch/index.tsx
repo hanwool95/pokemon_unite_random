@@ -4,7 +4,7 @@ import useSockets from "@/hooks/useSockets";
 import Button from "@/components/button";
 import GameScreen from "@/components/emoji-catch/GameScreen";
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 const EmojiCatchContainer = () => {
   const props = useSockets();
@@ -23,6 +23,7 @@ const EmojiCatchContainer = () => {
     isLoading,
     timer,
     setTimer,
+    setTimeLeft,
   } = props;
 
   const searchParams = useSearchParams();
@@ -47,7 +48,9 @@ const EmojiCatchContainer = () => {
   };
 
   const handleTimerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTimer(parseInt(e.target.value, 10));
+    const setTime = parseInt(e.target.value, 10);
+    setTimer(setTime);
+    setTimeLeft(setTime);
   };
 
   if (gameStarted) {

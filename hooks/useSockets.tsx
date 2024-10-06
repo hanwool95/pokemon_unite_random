@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import io from "socket.io-client";
 
 const useSockets = () => {
@@ -20,6 +26,9 @@ const useSockets = () => {
   const [currentTurn, setCurrentTurn] = useState<string>(""); // 현재 차례인 사용자
   const [gameMessage, setGameMessage] = useState("");
   const [timer, setTimer] = useState(60);
+  const [timeLeft, setTimeLeft] = useState(timer); // 30초 타이머
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const tickSound = useRef<HTMLAudioElement | null>(null); // 사운드 재생을 위한 Ref
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -80,19 +89,30 @@ const useSockets = () => {
 
     skt.on(
       "gameStarted",
-      ({ scores, timer }: { scores: number[]; timer: number }) => {
+      ({ scores, timer: initTimer }: { scores: number[]; timer: number }) => {
         setScores(scores); // 초기 점수 설정
-        setTimer(timer);
+        setTimer(initTimer);
+        setTimeLeft(initTimer);
         setGameStarted(true); // 게임 시작
       },
     );
 
     skt.on(
       "pokemonImage",
-      ({ image, name }: { image: string; name: string }) => {
+      ({
+        image,
+        name,
+        timer: initTimer,
+      }: {
+        image: string;
+        name: string;
+        timer: number;
+      }) => {
         setCurrentImage(image);
         setCurrentPokemonName(name);
         setCurrentHint("");
+        setTimer(initTimer);
+        setTimeLeft(initTimer);
       },
     );
 
@@ -106,6 +126,23 @@ const useSockets = () => {
       skt.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    if (!gameStarted) return;
+
+    if (timeLeft > 0) {
+      timerRef.current = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+    } else {
+      if (isMyTurn) skipRound(); // 시간이 끝나면 다음 차례로 넘어감
+    }
+
+    // 10초 남았을 때부터 사운드 재생
+    if (timeLeft === 7 && tickSound.current) {
+      tickSound.current.play();
+    }
+
+    return () => clearTimeout(timerRef.current!);
+  }, [timeLeft, gameStarted]);
 
   const createRoom = useCallback(() => {
     if (!nickname.trim()) {
@@ -146,7 +183,6 @@ const useSockets = () => {
 
   const submitGuess = useCallback(
     (guess: string) => {
-      console.log("guess: ", guess);
       socket.emit("submitGuess", { roomCode, guess });
       socket.emit("chat", { roomCode, message: `정답! ${guess}`, nickname });
     },
@@ -194,6 +230,9 @@ const useSockets = () => {
     isLoading,
     timer,
     setTimer,
+    timeLeft,
+    setTimeLeft,
+    tickSound,
   };
 };
 

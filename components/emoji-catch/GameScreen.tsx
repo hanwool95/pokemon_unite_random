@@ -28,6 +28,8 @@ const GameScreen = ({
   currentPokemonName,
   skipRound,
   timer,
+  timeLeft,
+  tickSound,
 }: {
   nicknames: string[];
   scores: number[];
@@ -45,51 +47,27 @@ const GameScreen = ({
   currentPokemonName: string;
   skipRound: () => void;
   timer: number;
+  timeLeft: number;
+  tickSound: React.MutableRefObject<HTMLAudioElement | null>;
 }) => {
   const [guess, setGuess] = useState("");
   const [hint, setHint] = useState("");
 
   const [showPicker, setShowPicker] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(timer); // 30초 타이머
 
   const chatEndRef = useRef<HTMLDivElement | null>(null); // 채팅 끝 위치를 참조할 ref
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const tickSound = useRef<HTMLAudioElement | null>(null); // 사운드 재생을 위한 Ref
 
   const onEmojiClick = (emojiObject: EmojiClickData, event: MouseEvent) => {
     setHint(emojiObject.emoji);
     setShowPicker(false);
   };
 
-  // 타이머 로직
-  useEffect(() => {
-    if (timeLeft > 0) {
-      timerRef.current = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-    } else {
-      if (isMyTurn) skipRound(); // 시간이 끝나면 다음 차례로 넘어감
-      setTimeLeft(timer); // 새로운 차례가 오면 타이머 초기화
-    }
-
-    // 10초 남았을 때부터 사운드 재생
-    if (timeLeft === 7 && tickSound.current) {
-      tickSound.current.play();
-    }
-
-    return () => clearTimeout(timerRef.current!);
-  }, [timeLeft]);
-
   useEffect(() => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
   }, [messages]);
-
-  const suggestGuess = useCallback(() => {
-    submitGuess(guess);
-    setGuess(""); // 제출 후 입력 필드 초기화
-  }, [guess, setGuess, submitGuess]);
 
   const onSubmitGuess = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
