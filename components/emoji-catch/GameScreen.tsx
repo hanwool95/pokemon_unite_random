@@ -118,12 +118,14 @@ const GameScreen = ({
           if (showPicker) setShowPicker(false);
         }}
       >
-        <ScoreBoard
-          nicknames={nicknames?.slice(0, 4)}
-          scores={scores?.slice(0, 4)}
-          messages={messages}
-          currentTurn={currentTurn}
-        />
+        {nicknames.length > 0 && scores.length > 0 && (
+          <ScoreBoard
+            nicknames={nicknames?.slice(0, 4)}
+            scores={scores?.slice(0, 4)}
+            messages={messages}
+            currentTurn={currentTurn}
+          />
+        )}
         <div className={"flex flex-col mx-auto w-full ml-2"}>
           <div className="p-4 bg-gray-100 w-full max-w-[320px] mx-auto">
             <h2>현재 차례: {currentTurn}</h2>
@@ -182,7 +184,7 @@ const GameScreen = ({
             </form>
           )}
         </div>
-        {nicknames.length > 5 && (
+        {nicknames.length > 5 && scores.length > 5 && (
           <ScoreBoardReverse
             nicknames={nicknames?.slice(4, 8)}
             scores={scores?.slice(4, 8)}
