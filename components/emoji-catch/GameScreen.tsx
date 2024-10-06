@@ -184,7 +184,7 @@ const GameScreen = ({
             </form>
           )}
         </div>
-        {nicknames.length > 5 && scores.length > 5 && (
+        {nicknames.length >= 5 && scores.length >= 5 && (
           <ScoreBoardReverse
             nicknames={nicknames?.slice(4, 8)}
             scores={scores?.slice(4, 8)}
