@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { BottomArrow } from "@/components/svgs";
+import ScoreBoardReverse from "@/components/ScoreBoard/ScoreBoardReverse";
 
 const GameScreen = ({
   nicknames,
@@ -141,8 +142,8 @@ const GameScreen = ({
         }}
       >
         <ScoreBoard
-          nicknames={nicknames}
-          scores={scores}
+          nicknames={nicknames.slice(0, 4)}
+          scores={scores.splice(0, 4)}
           messages={messages}
           currentTurn={currentTurn}
         />
@@ -208,6 +209,15 @@ const GameScreen = ({
             </div>
           )}
         </div>
+        {nicknames.length > 5 && scores.length > 5 && (
+          <ScoreBoardReverse
+            nicknames={nicknames.slice(4, 8)}
+            scores={scores.slice(4, 8)}
+            messages={messages}
+            currentTurn={currentTurn}
+          />
+        )}
+
         <div
           className={`absolute bottom-0 right-0 ${
             isChatOpen ? "w-[300px]" : "w-[50px]"
