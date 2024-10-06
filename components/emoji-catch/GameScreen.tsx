@@ -119,8 +119,8 @@ const GameScreen = ({
         }}
       >
         <ScoreBoard
-          nicknames={nicknames.slice(0, 4)}
-          scores={scores.slice(0, 4)}
+          nicknames={nicknames?.slice(0, 4)}
+          scores={scores?.slice(0, 4)}
           messages={messages}
           currentTurn={currentTurn}
         />
@@ -184,8 +184,8 @@ const GameScreen = ({
         </div>
         {nicknames.length > 5 && (
           <ScoreBoardReverse
-            nicknames={nicknames.slice(4, 8)}
-            scores={scores.slice(4, 8)}
+            nicknames={nicknames?.slice(4, 8)}
+            scores={scores?.slice(4, 8)}
             messages={messages}
             currentTurn={currentTurn}
           />
