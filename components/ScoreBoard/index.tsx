@@ -37,7 +37,7 @@ const ScoreBoard = ({
           key={idx}
           className={`w-1/8 p-4 border relative rounded-xl ${currentTurn === name ? "border-4 border-black" : ""} }`}
         >
-          <h2 className="text-lg font-bold">{name}</h2>
+          <h2 className="text-lg font-bold truncate">{name}</h2>
           <p>점수: {scores[idx]}</p>
 
           {visibleMessages.includes(name) && (

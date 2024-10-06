@@ -64,7 +64,9 @@ const EmojiCatchContainer = () => {
           <h2 className="text-blue-500">참여자</h2>
           <ul>
             {nicknames.map((name, idx) => (
-              <li key={idx}>{name}</li>
+              <li className={"truncate"} key={idx}>
+                {name}
+              </li>
             ))}
           </ul>
         </div>
