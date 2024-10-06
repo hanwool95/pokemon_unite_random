@@ -21,6 +21,8 @@ const EmojiCatchContainer = () => {
     gameStarted,
     nicknames,
     isLoading,
+    timer,
+    setTimer,
   } = props;
 
   const searchParams = useSearchParams();
@@ -42,6 +44,10 @@ const EmojiCatchContainer = () => {
     } else {
       alert("닉네임을 입력해주세요.");
     }
+  };
+
+  const handleTimerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTimer(parseInt(e.target.value, 10));
   };
 
   if (gameStarted) {
@@ -84,13 +90,32 @@ const EmojiCatchContainer = () => {
               </Button>
             </div>
             {isHost && (
-              <Button
-                disabled={nicknames.length < 2}
-                className="mt-5 w-full"
-                onClick={startGame}
-              >
-                게임 시작하기
-              </Button>
+              <div>
+                <div className="mt-5">
+                  <label
+                    htmlFor="timerSlider"
+                    className="block text-lg font-bold"
+                  >
+                    게임 타이머 설정: {timer}초
+                  </label>
+                  <input
+                    id="timerSlider"
+                    type="range"
+                    min={10}
+                    max={180}
+                    value={timer}
+                    onChange={handleTimerChange}
+                    className="w-full mt-2"
+                  />
+                </div>
+                <Button
+                  disabled={nicknames.length < 2}
+                  className="mt-5 w-full"
+                  onClick={startGame}
+                >
+                  게임 시작하기
+                </Button>
+              </div>
             )}
           </>
         ) : (

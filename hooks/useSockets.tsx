@@ -19,6 +19,7 @@ const useSockets = () => {
   const [currentHint, setCurrentHint] = useState<string>(""); // 현재 힌트
   const [currentTurn, setCurrentTurn] = useState<string>(""); // 현재 차례인 사용자
   const [gameMessage, setGameMessage] = useState("");
+  const [timer, setTimer] = useState(60);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -77,10 +78,14 @@ const useSockets = () => {
       setIsHost(skt.id === hostId);
     });
 
-    skt.on("gameStarted", (initialScores: number[]) => {
-      setScores(initialScores); // 초기 점수 설정
-      setGameStarted(true); // 게임 시작
-    });
+    skt.on(
+      "gameStarted",
+      ({ scores, timer }: { scores: number[]; timer: number }) => {
+        setScores(scores); // 초기 점수 설정
+        setTimer(timer);
+        setGameStarted(true); // 게임 시작
+      },
+    );
 
     skt.on(
       "pokemonImage",
@@ -121,8 +126,8 @@ const useSockets = () => {
   }, [socket, roomCode, nickname]);
 
   const startGame = useCallback(() => {
-    socket.emit("startGame", { roomCode });
-  }, [socket, roomCode]);
+    socket.emit("startGame", { roomCode, timer });
+  }, [socket, roomCode, timer]);
 
   const sendMessage = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -187,6 +192,8 @@ const useSockets = () => {
     currentPokemonName,
     skipRound,
     isLoading,
+    timer,
+    setTimer,
   };
 };
 

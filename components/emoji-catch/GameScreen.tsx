@@ -27,6 +27,7 @@ const GameScreen = ({
   setMessage,
   currentPokemonName,
   skipRound,
+  timer,
 }: {
   nicknames: string[];
   scores: number[];
@@ -43,15 +44,14 @@ const GameScreen = ({
   setMessage: React.Dispatch<SetStateAction<string>>;
   currentPokemonName: string;
   skipRound: () => void;
+  timer: number;
 }) => {
-  const TIME_LIMIT = 30;
-
   const [guess, setGuess] = useState("");
   const [hint, setHint] = useState("");
 
   const [showPicker, setShowPicker] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(TIME_LIMIT); // 30초 타이머
+  const [timeLeft, setTimeLeft] = useState(timer); // 30초 타이머
 
   const chatEndRef = useRef<HTMLDivElement | null>(null); // 채팅 끝 위치를 참조할 ref
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -69,7 +69,7 @@ const GameScreen = ({
       timerRef.current = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
     } else {
       if (isMyTurn) skipRound(); // 시간이 끝나면 다음 차례로 넘어감
-      setTimeLeft(TIME_LIMIT); // 새로운 차례가 오면 타이머 초기화
+      setTimeLeft(timer); // 새로운 차례가 오면 타이머 초기화
     }
 
     // 10초 남았을 때부터 사운드 재생
@@ -106,7 +106,7 @@ const GameScreen = ({
       <div className="relative w-full h-6 bg-gray-300 mt-4">
         <div
           className="absolute left-0 top-0 h-full bg-green-500 transition-all"
-          style={{ width: `${(timeLeft / TIME_LIMIT) * 100}%` }}
+          style={{ width: `${(timeLeft / timer) * 100}%` }}
         />
         <p className="absolute left-1/2 top-0 transform -translate-x-1/2 text-white font-bold">
           {timeLeft}초 남음
