@@ -9,7 +9,7 @@ const Button = ({
   disabled,
 }: {
   children?: React.ReactNode;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler;
   type?: "button" | "submit";
   className?: string;
   disabled?: boolean;

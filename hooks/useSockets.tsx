@@ -141,6 +141,7 @@ const useSockets = () => {
 
   const submitGuess = useCallback(
     (guess: string) => {
+      console.log("guess: ", guess);
       socket.emit("submitGuess", { roomCode, guess });
       socket.emit("chat", { roomCode, message: `정답! ${guess}`, nickname });
     },

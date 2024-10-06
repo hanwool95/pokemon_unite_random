@@ -91,12 +91,14 @@ const GameScreen = ({
     setGuess(""); // 제출 후 입력 필드 초기화
   }, [guess, setGuess, submitGuess]);
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault(); // 기본 엔터 동작 방지
-      suggestGuess();
-    }
-  };
+  const onSubmitGuess = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      submitGuess(guess);
+      setGuess(""); // 제출 후 입력 필드 초기화
+    },
+    [guess, setGuess, submitGuess],
+  );
 
   return (
     <>
@@ -186,27 +188,20 @@ const GameScreen = ({
             )}
           </div>
           {!isMyTurn && (
-            <div className="w-full p-4">
+            <form className="w-full p-4" onSubmit={onSubmitGuess}>
               <input
                 className="p-2 border w-full"
                 value={guess}
                 onChange={(e) => setGuess(e.target.value)}
-                onKeyDown={handleKeyPress}
                 placeholder="정답 입력"
               />
-              <Button
-                type={"submit"}
-                className={"w-full mt-2"}
-                onClick={() => {
-                  suggestGuess();
-                }}
-              >
+              <Button type="submit" className={"w-full mt-2"}>
                 정답 제출
               </Button>
-            </div>
+            </form>
           )}
         </div>
-        {nicknames.length > 5 && scores.length > 5 && (
+        {nicknames.length > 5 && (
           <ScoreBoardReverse
             nicknames={nicknames.slice(4, 8)}
             scores={scores.slice(4, 8)}
