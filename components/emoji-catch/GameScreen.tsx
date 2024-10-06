@@ -188,14 +188,17 @@ const GameScreen = ({
             )}
           </div>
           {!isMyTurn && (
-            <form className="w-full p-4" onSubmit={onSubmitGuess}>
+            <form className="flex flex-col w-full p-4" onSubmit={onSubmitGuess}>
               <input
-                className="p-2 border w-full"
+                className="p-2 border w-full max-w-[320px] mx-auto"
                 value={guess}
                 onChange={(e) => setGuess(e.target.value)}
                 placeholder="정답 입력"
               />
-              <Button type="submit" className={"w-full mt-2"}>
+              <Button
+                type="submit"
+                className={"w-full mt-2 max-w-[320px] mx-auto"}
+              >
                 정답 제출
               </Button>
             </form>
