@@ -63,6 +63,10 @@ const GameScreen = ({
     setShowPicker(false);
   };
 
+  useEffect(() => {
+    console.log("scores", scores);
+  }, [scores]);
+
   // 타이머 로직
   useEffect(() => {
     if (timeLeft > 0) {
@@ -142,7 +146,7 @@ const GameScreen = ({
       >
         <ScoreBoard
           nicknames={nicknames.slice(0, 4)}
-          scores={scores.splice(0, 4)}
+          scores={scores.slice(0, 4)}
           messages={messages}
           currentTurn={currentTurn}
         />
