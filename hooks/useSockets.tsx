@@ -133,7 +133,11 @@ const useSockets = () => {
     if (timeLeft > 0) {
       timerRef.current = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
     } else {
-      if (isMyTurn) skipRound(); // 시간이 끝나면 다음 차례로 넘어감
+      if (
+        isMyTurn ||
+        (!nicknames.includes(currentTurn) && nicknames[0] === nickname)
+      )
+        skipRound(); // 시간이 끝나면 다음 차례로 넘어감
     }
 
     // 10초 남았을 때부터 사운드 재생
