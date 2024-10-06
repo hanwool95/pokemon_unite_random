@@ -52,7 +52,6 @@ const GameScreen = ({
   const [showPicker, setShowPicker] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT); // 30초 타이머
-  const [playSound, setPlaySound] = useState(false); // 10초 남았을 때 사운드 재생 여부
 
   const chatEndRef = useRef<HTMLDivElement | null>(null); // 채팅 끝 위치를 참조할 ref
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -71,12 +70,10 @@ const GameScreen = ({
     } else {
       if (isMyTurn) skipRound(); // 시간이 끝나면 다음 차례로 넘어감
       setTimeLeft(TIME_LIMIT); // 새로운 차례가 오면 타이머 초기화
-      setPlaySound(false);
     }
 
     // 10초 남았을 때부터 사운드 재생
     if (timeLeft === 7 && tickSound.current) {
-      setPlaySound(true);
       tickSound.current.play();
     }
 
