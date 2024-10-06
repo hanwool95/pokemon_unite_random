@@ -63,10 +63,6 @@ const GameScreen = ({
     setShowPicker(false);
   };
 
-  useEffect(() => {
-    console.log("scores", scores);
-  }, [scores]);
-
   // 타이머 로직
   useEffect(() => {
     if (timeLeft > 0) {
@@ -86,7 +82,7 @@ const GameScreen = ({
 
   useEffect(() => {
     if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+      chatEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
   }, [messages]);
 
