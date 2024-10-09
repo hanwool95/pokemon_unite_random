@@ -6,10 +6,18 @@ import React, {
   useState,
   useCallback,
   SetStateAction,
+  useMemo,
 } from "react";
-import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { BottomArrow } from "@/components/svgs";
 import ScoreBoardReverse from "@/components/ScoreBoard/ScoreBoardReverse";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
+import { unifiedStringToEmoji } from "@/libs/simple_functions";
+import i18n from "@emoji-mart/data/i18n/ko.json";
+
+import { Emoji, init } from "emoji-mart";
+
+init({ data });
 
 const GameScreen = ({
   nicknames,
@@ -58,8 +66,21 @@ const GameScreen = ({
 
   const chatEndRef = useRef<HTMLDivElement | null>(null); // 채팅 끝 위치를 참조할 ref
 
-  const onEmojiClick = (emojiObject: EmojiClickData, event: MouseEvent) => {
-    setHint(emojiObject.emoji);
+  const splitCurrentHints = useMemo(() => {
+    return currentHint.split(" ");
+  }, [currentHint]);
+
+  const onEmojiClick = (
+    emojiObject: {
+      id: string;
+      keywords: string[];
+      name: string;
+      native: string;
+      unified: string;
+    },
+    event: MouseEvent,
+  ) => {
+    setHint(emojiObject.unified);
     setShowPicker(false);
   };
 
@@ -100,7 +121,7 @@ const GameScreen = ({
             "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"
           }
         >
-          <EmojiPicker onEmojiClick={onEmojiClick} />
+          <Picker data={data} i18n={i18n} onEmojiSelect={onEmojiClick} />
         </div>
       )}
       {!!gameMessage && (
@@ -135,14 +156,16 @@ const GameScreen = ({
                 <p className={"text-center text-2xl"}>{currentPokemonName}</p>
               </div>
             )}
-            <p
-              className={"py-8 text-3xl text-center"}
-            >{`${currentHint || "출제자 힌트 입력중"}`}</p>
-            {isMyTurn && currentHint.length < 6 && (
+            <p className={"py-8 text-3xl text-center"}>
+              {splitCurrentHints.length > 0
+                ? splitCurrentHints.map((hint) => unifiedStringToEmoji(hint))
+                : "출제자 힌트 입력중"}
+            </p>
+            {isMyTurn && splitCurrentHints.length < 3 && (
               <div className={"mt-2 w-full flex flex-col"}>
                 <input
                   className="p-2 border"
-                  value={hint}
+                  value={unifiedStringToEmoji(hint)}
                   onClick={(event) => {
                     event.preventDefault();
                     setShowPicker(!showPicker);
@@ -161,7 +184,7 @@ const GameScreen = ({
                 </Button>
               </div>
             )}
-            {isMyTurn && currentHint.length >= 6 && (
+            {isMyTurn && splitCurrentHints.length > 3 && (
               <Button className={"w-full"} onClick={skipRound}>
                 {"패스!"}
               </Button>

@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import io from "socket.io-client";
+import { unifiedStringToEmoji } from "@/libs/simple_functions";
 
 const useSockets = () => {
   const [nickname, setNickname] = useState<string>("");
