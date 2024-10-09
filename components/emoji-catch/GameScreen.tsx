@@ -63,7 +63,7 @@ const GameScreen = ({
   const chatEndRef = useRef<HTMLDivElement | null>(null); // 채팅 끝 위치를 참조할 ref
 
   const splitCurrentHints = useMemo(() => {
-    return currentHint.split(" ");
+    return currentHint ? currentHint.split(" ") : [];
   }, [currentHint]);
 
   const onEmojiClick = (
@@ -180,7 +180,7 @@ const GameScreen = ({
                 </Button>
               </div>
             )}
-            {isMyTurn && splitCurrentHints.length > 3 && (
+            {isMyTurn && splitCurrentHints.length === 3 && (
               <Button className={"w-full"} onClick={skipRound}>
                 {"패스!"}
               </Button>
