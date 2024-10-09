@@ -15,10 +15,6 @@ import Picker from "@emoji-mart/react";
 import { unifiedStringToEmoji } from "@/libs/simple_functions";
 import i18n from "@emoji-mart/data/i18n/ko.json";
 
-import { init } from "emoji-mart";
-
-init({ data });
-
 const GameScreen = ({
   nicknames,
   scores,
