@@ -31,7 +31,7 @@ const PokemonCardCommentCounter: React.FC<Props> = ({
     );
 
     videoInfo.comments.forEach((comment) => {
-      // if (uniqueCommenters.has(comment.author)) return; // 중복 닉네임이면 무시
+      // if (uniqueCommenters.has(comment.author)) return; // Todo 주석 해제 필요. 중복 닉네임이면 무시
       uniqueCommenters.add(comment.author);
 
       // 코멘트 전체 텍스트를 Set으로 검색하여 카드 이름이 있는지 확인
