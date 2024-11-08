@@ -51,7 +51,11 @@ const PokemonCardChallenge: React.FC<{
           </span>
         }
       />
-      <PokemonCardCounter videoInfo={videoInfo} cards={pokemonCards} />
+      <PokemonCardCounter
+        videoInfo={videoInfo}
+        cards={pokemonCards}
+        className={"mt-4"}
+      />
     </div>
   );
 };
