@@ -16,8 +16,8 @@ export default function PokeCardDeckLayout({
     <html lang="en">
       <body>
         <Image
-          className={"mx-auto"}
-          src={"/pokemon-emoji-top-banner.png"}
+          className={"mx-auto mt-4"}
+          src={"/pokemon-card-challenge-banner.png"}
           alt={"포켓몬 이모지 캐치마인드 by 카이사르"}
           width={280}
           height={360}
