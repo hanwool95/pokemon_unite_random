@@ -47,7 +47,7 @@ const PokemonCardChallenge: React.FC<{
             목표 승리 수<br />
             (좋아요 / 100)
             <br />
-            {Math.round(displayedLikes / 10)}
+            {Math.round(displayedLikes / 100)}
           </span>
         }
       />
