@@ -15,11 +15,11 @@ export default function RootLayout({
   return (
     <div>
       <Image
-        className={"mx-auto"}
-        src={"/pokemon-emoji-top-banner.png"}
+        className={"mx-auto mt-8"}
+        src={"/pokemon-card-roulette-banner.png"}
         alt={"포켓몬 이모지 캐치마인드 by 카이사르"}
-        width={280}
-        height={360}
+        width={360}
+        height={480}
       />
       {children}
       <div className={"mx-auto"}>
