@@ -53,6 +53,27 @@ const PokeCardRoulette = () => {
     }, 100); // 0.1초마다 업데이트
   };
 
+  const copyPickedCards = () => {
+    if (pickedCards.length === 0) {
+      alert("뽑힌 카드가 없습니다.");
+      return;
+    }
+
+    const textToCopy = pickedCards
+      .map((card) => `${card.name} (${card.pack})`)
+      .join("\n");
+
+    navigator.clipboard
+      .writeText(textToCopy)
+      .then(() => {
+        alert("뽑힌 카드 목록이 복사되었습니다!");
+      })
+      .catch((err) => {
+        console.error("복사 실패:", err);
+        alert("복사 중 문제가 발생했습니다.");
+      });
+  };
+
   return (
     <div className="flex flex-col md:flex-row justify-center items-start mt-8">
       <div className="text-center w-full md:w-2/3">
@@ -80,14 +101,25 @@ const PokeCardRoulette = () => {
           {"초기화"}
         </button>
       </div>
-      <div className="w-full md:w-1/3 mt-8 md:mt-0 md:ml-2 px-8 md:px-0">
-        <h2 className="text-xl font-bold mb-4 text-center">뽑힌 카드</h2>
+      <div className="flex flex-col w-full md:w-1/3 mt-8 md:mt-0 md:ml-2 px-8 md:px-0">
+        <div className={"flex mx-auto mb-2"}>
+          <h2 className="text-xl font-bold text-center my-auto align-middle">
+            뽑힌 카드
+          </h2>
+          <button
+            onClick={copyPickedCards}
+            className="px-4 py-2 ml-2 text-lg font-bold cursor-pointer bg-blue-400 rounded-md hover:bg-blue-500 text-white"
+          >
+            복사
+          </button>
+        </div>
         <div className="flex flex-col gap-4 items-center bg-gray-100 border rounded-lg p-4 shadow-md max-h-[420px] overflow-y-auto">
           {pickedCards.length > 0 ? (
             pickedCards.map((card) => (
-              <p key={card.id} className="font-bold">
-                {card.name}
-              </p>
+              <div key={card.id} className={"flex"}>
+                <p className="font-bold">{card.name}</p>
+                <p className="font-bold ml-2 text-gray-400">{card.pack}</p>
+              </div>
             ))
           ) : (
             <p className="text-gray-600 text-center">
