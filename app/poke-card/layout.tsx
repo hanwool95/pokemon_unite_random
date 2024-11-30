@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "포켓몬 카드게임 - 계피디",
-  description: "3분 요약 카이사르의 포켓몬 이모티콘 캐치마인드",
+  title: "포켓몬 카드게임 룰렛 | 계피디",
+  description:
+    "3분 요약 카이사르 채널의 계피디가 제작한 포켓몬 카드 게임 카드 룰렛",
 };
 
 export default function RootLayout({
