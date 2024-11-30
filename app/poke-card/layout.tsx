@@ -26,8 +26,8 @@ export default function RootLayout({
         <p className={"mx-auto text-center"}>
           {"created by 계피디 in 3분 요약 카이사르"}
         </p>
-        <p className={"mx-auto text-center mt-2 whitespace-pre-wrap"}>
-          {"이용료 = 구독!"}
+        <p className={"mx-auto text-center mt-0.5 whitespace-pre-wrap"}>
+          {"구독은 제작과 유지보수에 큰 힘이 됩니다 (__)"}
         </p>
         <div className="flex justify-center mt-2">
           <a
