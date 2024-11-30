@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { usePokemonCardPacks } from "@/hooks/usePokemonCardPacks";
+import { CardInfo, usePokemonCardPacks } from "@/hooks/usePokemonCardPacks";
 
 const PokeCardRoulette = () => {
   const searchParams = useSearchParams();
@@ -10,7 +10,7 @@ const PokeCardRoulette = () => {
   const { data: pokemonCards } = usePokemonCardPacks(card || "최강의유전자");
 
   const [currentName, setCurrentName] = useState(""); // 현재 룰렛에 표시되는 이름
-  const [winner, setWinner] = useState(null); // 최종 당첨 이름
+  const [winner, setWinner] = useState<CardInfo | null>(null); // 최종 당첨 이름
   const [isRolling, setIsRolling] = useState(false); // 룰렛 동작 상태
 
   useEffect(() => {
@@ -40,43 +40,20 @@ const PokeCardRoulette = () => {
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "2rem" }}>
-      <h1>Pokémon Card Roulette</h1>
-      <div
-        style={{
-          fontSize: "2rem",
-          fontWeight: "bold",
-          margin: "1rem 0",
-          height: "3rem",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+    <div className="text-center py-8">
+      <h1 className="text-2xl font-bold">Pokémon Card Roulette</h1>
+      <div className="text-2xl font-bold my-4 h-12 flex items-center justify-center">
         {isRolling ? currentName : winner ? winner.name : "돌려주세요!"}
       </div>
       <button
         onClick={startRoulette}
-        style={{
-          padding: "0.5rem 1rem",
-          fontSize: "1rem",
-          fontWeight: "bold",
-          cursor: "pointer",
-          backgroundColor: "#ffcc00",
-          border: "none",
-          borderRadius: "5px",
-        }}
+        className={`px-4 py-2 text-lg font-bold cursor-pointer bg-yellow-400 rounded-md ${
+          isRolling ? "opacity-50 cursor-not-allowed" : "hover:bg-yellow-500"
+        }`}
         disabled={isRolling}
       >
         {isRolling ? "돌아가는 중..." : "룰렛 돌리기"}
       </button>
-      {winner && (
-        <div style={{ marginTop: "2rem" }}>
-          <p>
-            축하합니다! <strong>{winner.name}</strong> 카드를 뽑았습니다!
-          </p>
-        </div>
-      )}
     </div>
   );
 };
